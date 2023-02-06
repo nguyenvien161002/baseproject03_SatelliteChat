@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">SatelliteApp</string>
+    <string name="label_sign_in">Đăng nhập vào Satellite</string>
+    <string name="label_sign_up">Đăng ký tài khoản vào Satellite</string>
+    <string name="label_sign_in_with_email_password">Hoặc đăng nhập với email và mật khẩu của bạn:</string>
+    <string name="label_sign_up_with_email_password">Hoặc đăng ký với email và mật khẩu của bạn:</string>
+    <string name="label_username">Tên của bạn</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Mật khẩu</string>
+    <string name="label_confirm_password">Nhập lại mật khẩu</string>
+    <string name="label_btn_sign_in">Đăng nhập</string>
+    <string name="label_btn_sign_up">Đăng ký</string>
+    <string name="policy_terms">Việc bạn tiếp tục sử dụng ứng dụng này đồng nghĩa bạn đồng ý với <b>Điều khoản của chúng tôi</b>  của chúng tôi.</string>
+    <string name="label_forget_password">Quên mật khẩu?</string>
+    <string name="label_sign_out">Đăng xuất</string>
+    <string name="facebook_app_id">883005992841830</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">5db479d6c44f7df0416d0b26ec57dbdb</string>
+    <string name="logo_description">Logo ứng dụng</string>
+    <string name="logo_google">Logo_google</string>
+    <string name="logo_facebook">Logo facebook</string>
+    <string name="remember_me">Nhớ mật khẩu</string>
+    <string name="dont_have_account">Bạn chưa có tài khoản?</string>
+    <string name="menu">menu</string>
+    <string name="chat_part">Đoạn Chat</string>
+    <string name="set_the_status">Đặt trạng thái</string>
+    <string name="avatar">avatar</string>
+    <string name="username">Nguyễn Viên</string>
+    <string name="marketplace">Marketplace</string>
+    <string name="waiting_message">Tin nhắn đang chờ</string>
+    <string name="archives">Kho lưu trữ</string>
+    <string name="community">Cộng đồng</string>
+    <string name="label_edit">CHỈNH SỬA</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="arrow_down">arrow down</string>
+    <string name="icon_user">icon_user</string>
+    <string name="set_state">Đặt trạng thái</string>
+</resources>

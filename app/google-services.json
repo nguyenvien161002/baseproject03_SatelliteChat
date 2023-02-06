@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "267577162745",
+    "firebase_url": "https://satellitechat-default-rtdb.firebaseio.com",
+    "project_id": "satellitechat",
+    "storage_bucket": "satellitechat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267577162745:android:6813b175d226731038db28",
+        "android_client_info": {
+          "package_name": "com.example.satellitechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267577162745-mc0llkruu8s65gdj12mvi7dvmcvnh63u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.satellitechat",
+            "certificate_hash": "8f10a2e7761dbd44e6973c8bbe14f5933e706049"
+          }
+        },
+        {
+          "client_id": "267577162745-njop7ibvc8orpat0jg3o2fqulals3764.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTEAKxIuCs533M4ORZlhU_c66qTNDVy4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267577162745-njop7ibvc8orpat0jg3o2fqulals3764.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

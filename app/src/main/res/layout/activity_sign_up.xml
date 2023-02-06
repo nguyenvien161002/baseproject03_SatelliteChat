@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    tools:context=".activity.authentication.SignUpActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/logo_main"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/logo"
+                android:contentDescription="@string/logo_description" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/be_vietnam_bold"
+                android:text="@string/label_sign_up"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="37sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="25dp">
+
+                <ImageView
+                    android:id="@+id/btnSignInGg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/border_social"
+                    android:contentDescription="@string/logo_google"
+                    android:padding="10dp"
+                    android:src="@drawable/google" />
+
+                <ImageView
+                    android:id="@+id/btnSignInFb"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/border_social"
+                    android:padding="10dp"
+                    android:radius="50dp"
+                    android:src="@drawable/facebook"
+                    android:contentDescription="@string/logo_facebook" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/be_vietnam_light"
+                android:text="@string/label_sign_up_with_email_password"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/inputUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_input"
+                android:hint="@string/label_username"
+                android:inputType="text"
+                android:padding="14dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:autofillHints=""
+                android:fontFamily="@font/be_vietnam_bold"/>
+
+            <EditText
+                android:id="@+id/inputEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/border_input"
+                android:hint="@string/label_email"
+                android:inputType="textEmailAddress"
+                android:padding="14dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:autofillHints=""
+                android:fontFamily="@font/be_vietnam_bold"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginTop="10dp"
+                app:passwordToggleEnabled="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false">
+
+                <EditText
+                    android:id="@+id/inputPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_input"
+                    android:inputType="textPassword"
+                    android:hint="@string/label_password"
+                    android:padding="14dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:drawableEnd="@drawable/ic_outline_visibility_24"
+                    android:autofillHints="" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginTop="10dp"
+                app:passwordToggleEnabled="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false">
+
+                <EditText
+                    android:id="@+id/inputConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_input"
+                    android:inputType="textPassword"
+                    android:hint="@string/label_confirm_password"
+                    android:padding="14dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:drawableEnd="@drawable/ic_outline_visibility_24"
+                    android:autofillHints="" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                android:weightSum="1.0">
+
+                <Button
+                    android:id="@+id/btnSignUp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="0.5"
+                    android:padding="14dp"
+                    android:text="@string/label_btn_sign_up"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:background="@drawable/border_btn_sign_in"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    style="?android:attr/buttonBarButtonStyle" />
+
+                <Button
+                    android:id="@+id/btnSignIn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="0.5"
+                    android:padding="14dp"
+                    android:text="@string/label_btn_sign_in"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary"
+                    android:background="@drawable/border_btn_sign_up"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    style="?android:attr/buttonBarButtonStyle" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/policy_terms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/policy_terms"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
