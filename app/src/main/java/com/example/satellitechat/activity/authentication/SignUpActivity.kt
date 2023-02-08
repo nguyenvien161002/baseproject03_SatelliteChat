@@ -37,6 +37,7 @@ class SignUpActivity : AppCompatActivity() {
         // Go through the sign in interface
         btnSignIn.setOnClickListener {
             startActivity(Intent(this, SignInActivity::class.java))
+            finish()
         }
 
         // Authentication sign up account
@@ -56,6 +57,7 @@ class SignUpActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
             overridePendingTransition(0, 0)
+            finish()
         }
 
         // Authentication sign in with facebook
@@ -64,6 +66,7 @@ class SignUpActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
             overridePendingTransition(0, 0)
+            finish()
         }
 
     }
@@ -90,7 +93,7 @@ class SignUpActivity : AppCompatActivity() {
                                     }
                                 }
                             } else {
-                                println("Dòng 97:" + it.exception)
+                                println(it.exception)
                             }
                         }
                 } else {

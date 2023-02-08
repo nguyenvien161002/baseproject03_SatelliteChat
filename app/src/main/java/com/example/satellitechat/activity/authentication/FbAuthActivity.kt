@@ -62,7 +62,7 @@ class FbAuthActivity : SignInActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 } else {
-                    Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext, task.exception.toString(), Toast.LENGTH_SHORT).show()
                 }
             }
     }

@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
+    tools:context=".activity.client.ProfileActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        tools:ignore="MissingConstraints,UseCompoundDrawables"
+        tools:layout_editor_absoluteX="15dp">
+
+        <ImageView
+            android:id="@+id/icon_backspace"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_keyboard_backspace"
+            android:contentDescription="@string/icon_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="25dp"
+            android:gravity="center"
+            android:paddingBottom="4dp"
+            android:text="@string/me"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteY="4dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profile_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:layout_editor_absoluteX="15dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btn_camera_photo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_icon_menu"
+                android:contentDescription="@string/menu"
+                android:padding="8dp"
+                android:src="@drawable/ic_baseline_camera_alt"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="124dp"
+                tools:layout_editor_absoluteY="0dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/image_profile"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    app:cardCornerRadius="110dp"
+                    tools:ignore="MissingConstraints">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/username"
+                        android:src="@drawable/avatar" />
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/be_vietnam_bold"
+            android:text="Nguyễn Viên"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_profile"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/set_custom_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/be_vietnam_bold"
+            android:padding="5dp"
+            android:text="@string/set_custom_state"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_profile"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="266dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_main"
+        tools:ignore="ScrollViewCount">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/item1_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:id="@+id/icon_dark_mode"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_icon_menu"
+                    android:contentDescription="@string/dark_mode"
+                    android:padding="8dp"
+                    android:rotation="140"
+                    android:src="@drawable/ic_baseline_mode_night" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/btn_dark_mode"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:fontFamily="@font/be_vietnam_bold"
+                        android:gravity="top|left"
+                        android:paddingStart="58dp"
+                        android:text="@string/dark_mode"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+
+                    <TextView
+                        android:id="@+id/state_dark_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|left"
+                        android:paddingStart="58dp"
+                        android:text="@string/turn_off"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/item2_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:id="@+id/active_status"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_green_rounded_icon"
+                    android:contentDescription="@string/active_status"
+                    android:padding="8dp"
+                    android:rotation="180"
+                    android:src="@drawable/ic_baseline_motion_photos_on" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/btn_active_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:fontFamily="@font/be_vietnam_bold"
+                        android:gravity="top|left"
+                        android:paddingStart="58dp"
+                        android:text="@string/active_status"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+
+                    <TextView
+                        android:id="@+id/state_active_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|left"
+                        android:paddingStart="58dp"
+                        android:text="@string/turn_on"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/item3_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_red_rounded_icon"
+                    android:contentDescription="@string/active_status"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_alternate_email" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/btn_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:fontFamily="@font/be_vietnam_bold"
+                        android:gravity="top|left"
+                        android:paddingStart="58dp"
+                        android:text="@string/label_username"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+
+                    <TextView
+                        android:id="@+id/state_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|left"
+                        android:paddingStart="58dp"
+                        android:text="m.me/nguyenvien161002"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/be_vietnam_bold"
+                android:text="@string/custom"
+                android:textColor="@color/black_400"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:id="@+id/item4_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_blue_rounded_icon"
+                    android:contentDescription="@string/icon"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_shield" />
+
+                <TextView
+                    android:id="@+id/btn_privacy_and_safety"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:gravity="center|left"
+                    android:paddingStart="58dp"
+                    android:text="@string/privacy_and_safety"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/item5_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_purple_rounded_icon"
+                    android:contentDescription="@string/icon"
+                    android:padding="8dp"
+                    android:src="@drawable/profile_image" />
+
+                <TextView
+                    android:id="@+id/btn_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:gravity="center|left"
+                    android:paddingStart="58dp"
+                    android:text="@string/avatar"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/item6_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_yellow_rounded_icon"
+                    android:contentDescription="@string/icon"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_notifications" />
+
+                <TextView
+                    android:id="@+id/btn_notification_sound"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:gravity="center|left"
+                    android:paddingStart="58dp"
+                    android:text="@string/notification_sound"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/item7_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_purple_700_rounded_icon"
+                    android:contentDescription="@string/icon"
+                    android:padding="10dp"
+                    android:src="@drawable/icon_chat" />
+
+                <TextView
+                    android:id="@+id/btn_sms"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:gravity="center|left"
+                    android:paddingStart="58dp"
+                    android:text="@string/sms"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/item8_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_pink_rounded_icon"
+                    android:contentDescription="@string/icon"
+                    android:padding="8dp"
+                    android:src="@drawable/icon_picture" />
+
+                <TextView
+                    android:id="@+id/btn_photos_media_file"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:gravity="center|left"
+                    android:paddingStart="58dp"
+                    android:text="@string/photos_media_files"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/item9_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_orange_rounded_icon"
+                    android:contentDescription="@string/icon"
+                    android:padding="8dp"
+                    android:src="@drawable/icon_foam_bubbles" />
+
+                <TextView
+                    android:id="@+id/btn_chat_bubble"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:gravity="center|left"
+                    android:paddingStart="58dp"
+                    android:text="@string/chat_bubble"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/be_vietnam_bold"
+                android:text="@string/safe"
+                android:textColor="@color/black_400"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:id="@+id/item10_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_purple_rounded_icon"
+                    android:contentDescription="@string/icon"
+                    android:padding="8dp"
+                    android:src="@drawable/icon_change" />
+
+                <TextView
+                    android:id="@+id/btn_account_transfer"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:gravity="center|left"
+                    android:paddingStart="58dp"
+                    android:text="@string/account_transfer"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/item11_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_red_rounded_icon"
+                    android:contentDescription="@string/icon"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_warning" />
+
+                <TextView
+                    android:id="@+id/btn_report_problem"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:gravity="center|left"
+                    android:paddingStart="58dp"
+                    android:text="@string/report_problem"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/item12_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints,UselessParent">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_blue_rounded_icon"
+                    android:contentDescription="@string/icon"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_help" />
+
+                <TextView
+                    android:id="@+id/btn_help"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:fontFamily="@font/be_vietnam_bold"
+                    android:gravity="center|left"
+                    android:paddingStart="58dp"
+                    android:text="@string/help"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,6 +30,7 @@ open class SignInActivity : AppCompatActivity() {
         // Go through the sign up interface
         btnSignUp.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
+            finish()
         }
 
         // Check user has been every password not
@@ -79,6 +80,7 @@ open class SignInActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
             overridePendingTransition(0, 0)
+            finish()
         }
 
         // Authentication sign in with facebook
@@ -87,6 +89,7 @@ open class SignInActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
             overridePendingTransition(0, 0)
+            finish()
         }
 
         // Authentication forgot password
