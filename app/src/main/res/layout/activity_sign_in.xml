@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,8 +11,13 @@
     tools:context=".activity.authentication.SignInActivity">
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,6 +30,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:contentDescription="@string/logo_description"
                 app:srcCompat="@drawable/logo" />
 
             <TextView
@@ -52,6 +58,7 @@
                     android:layout_height="60dp"
                     android:layout_marginEnd="5dp"
                     android:background="@drawable/border_social"
+                    android:contentDescription="@string/icon_gg"
                     android:padding="10dp"
                     android:src="@drawable/google" />
 
@@ -61,6 +68,7 @@
                     android:layout_height="60dp"
                     android:layout_marginStart="5dp"
                     android:background="@drawable/border_social"
+                    android:contentDescription="@string/icon_fb"
                     android:padding="10dp"
                     android:radius="50dp"
                     android:src="@drawable/facebook" />
@@ -133,13 +141,13 @@
                     android:id="@+id/forgot_password"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
                     android:fontFamily="@font/be_vietnam_bold"
+                    android:gravity="center"
                     android:text="@string/label_forget_password"
                     android:textColor="@color/primary"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_alignParentEnd="true"
                     tools:ignore="RelativeOverlap" />
 
             </RelativeLayout>
@@ -148,41 +156,41 @@
                 android:id="@+id/btnSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/border_btn_sign_in"
                 android:fontFamily="@font/be_vietnam_bold"
                 android:padding="14dp"
                 android:text="@string/label_btn_sign_in"
                 android:textColor="@color/white"
-                android:textSize="14sp"
-                android:layout_marginTop="10dp"/>
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="30dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/dont_have_account"
                     android:textColor="@color/black"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/btnSignUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="10dp"
                     android:text="@string/label_btn_sign_up"
                     android:textColor="@color/primary"
-                    android:textStyle="bold"
                     android:textSize="14sp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingStart="5dp"
+                    android:textStyle="bold"
                     tools:ignore="RtlSymmetry" />
 
             </LinearLayout>
@@ -201,4 +209,16 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressBarSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/primary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

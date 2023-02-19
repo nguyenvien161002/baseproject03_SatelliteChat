@@ -1,59 +1,71 @@
 package com.example.satellitechat.activity.client
 
 import android.content.Intent
-import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.text.Layout
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.AlignmentSpan
-import android.widget.EditText
-import android.widget.LinearLayout
+import android.provider.MediaStore
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.bumptech.glide.Glide
 import com.example.satellitechat.R
-import com.example.satellitechat.activity.authentication.SignInActivity
 import com.example.satellitechat.activity.client.sidebar.ArchivesFragment
 import com.example.satellitechat.activity.client.sidebar.ChatFragment
 import com.example.satellitechat.activity.client.sidebar.MarketPlaceFragment
 import com.example.satellitechat.activity.client.sidebar.MessageWaitingFragment
-import com.example.satellitechat.adapter.UserAdapter
 import com.example.satellitechat.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_chat.*
-import kotlinx.android.synthetic.main.item_box_chat.*
 import kotlinx.android.synthetic.main.sidebar_header.view.*
+import java.text.DateFormat
+import java.util.Calendar
 
 
 class MainActivity : AppCompatActivity() {
 
+    private var BACK_PRESS_TIME: Long = 0;
+    private var IMAGE_CAPTURE_REQUEST: Int = 3000
+    private var IMAGE_PERMISSION: Int = 3001
+    private var currentUserID: String = ""
     private lateinit var auth: FirebaseAuth
-    private lateinit var sharedPreferences: SharedPreferences
-    private var backPressTime: Long = 0;
     private lateinit var fToast: Toast
+    private lateinit var sidebarHeader: View
+    private lateinit var usersRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         auth = Firebase.auth
+        currentUserID = auth.currentUser!!.uid
+        usersRef = FirebaseDatabase.getInstance().getReference("Users")
 
         btnMenu.setOnClickListener {
             drawer_layout_main.openDrawer(GravityCompat.START)
         }
 
-        val sidebarHeader = sidebar_view.getHeaderView(0)
-        val arrayTab = arrayOf(sidebarHeader.item1_sidebar, sidebarHeader.item2_sidebar, sidebarHeader.item3_sidebar, sidebarHeader.item4_sidebar)
-        val arrayBtnTab = arrayOf(sidebarHeader.chat_sidebar, sidebarHeader.marketplace_sidebar, sidebarHeader.waiting_message_sidebar, sidebarHeader.archives_sidebar)
+        sidebarHeader = sidebar_view.getHeaderView(0)
+
+        val arrayTab = arrayOf(
+            sidebarHeader.item1_sidebar, sidebarHeader.item2_sidebar,
+            sidebarHeader.item3_sidebar, sidebarHeader.item4_sidebar
+        )
+        val arrayBtnTab = arrayOf(
+            sidebarHeader.chat_sidebar, sidebarHeader.marketplace_sidebar,
+            sidebarHeader.waiting_message_sidebar, sidebarHeader.archives_sidebar
+        )
+
+        // Init first Fragment when first logged in
         replaceFragment(ChatFragment())
 
         arrayBtnTab.forEach { btn ->
@@ -91,27 +103,33 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Switch to profile activity
         sidebarHeader.icon_setting.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            val intent = Intent(this@MainActivity, ProfileActivity::class.java)
+            startActivityForResult(intent, 1)
+            finish()
+        }
+
+        // Switch to switch activity
+        sidebarHeader.box_account.setOnClickListener {
+            val intent = Intent(this, SwitchAccountsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             finish()
         }
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-        sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
-        val getIsSignIn = sharedPreferences.getString("is_sign_in", "")
-        if(getIsSignIn == "false") {
-            startActivity(Intent(this, SignInActivity::class.java))
-            finish()
+        btnCameraPhoto.setOnClickListener {
+            if(ActivityCompat.checkSelfPermission(this@MainActivity, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
+                ActivityCompat.requestPermissions(this@MainActivity, arrayOf(android.Manifest.permission.CAMERA), IMAGE_PERMISSION)
+            } else {
+                activeCamera()
+            }
         }
+
     }
 
     override fun onBackPressed() {
-        if((backPressTime + 2000) > System.currentTimeMillis()) {
+        if((BACK_PRESS_TIME + 2000) > System.currentTimeMillis()) {
             fToast.cancel()
             super.onBackPressed()
             return
@@ -119,7 +137,31 @@ class MainActivity : AppCompatActivity() {
             fToast = Toast.makeText(this, "Nhấn quay lại một lần nữa để thoát ứng dụng", Toast.LENGTH_LONG)
             fToast.show()
         }
-        backPressTime = System.currentTimeMillis()
+        BACK_PRESS_TIME = System.currentTimeMillis()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == IMAGE_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            activeCamera()
+        }
+    }
+
+    // CAMERA CAPTURE CHAT FRAGMENT
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == IMAGE_CAPTURE_REQUEST && resultCode != null) {
+            val bitmap: Bitmap? = data!!.getParcelableExtra<Bitmap>("data")
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getUserForSidebar(currentUserID)
+        updateUserState("online")
+        usersRef.child(currentUserID)
+            .child("userState").child("type")
+            .onDisconnect().setValue("offline")
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -137,6 +179,46 @@ class MainActivity : AppCompatActivity() {
         array.forEach {
             it.setBackgroundResource(0)
         }
+    }
+
+    private fun getUserForSidebar(currentUserId: String) {
+        val userRef: DatabaseReference = usersRef.child(currentUserId)
+        userRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val infoUser = snapshot.getValue(User::class.java)
+                sidebarHeader.userName.text = infoUser!!.userName
+                if (infoUser.userImage == "") {
+                    sidebarHeader.imageProfile.setImageResource(R.drawable.profile_image)
+                    sidebarHeader.imageProfile.strokeWidth = 2F
+                    sidebarHeader.imageProfile.setStrokeColorResource(R.color.primary)
+                } else {
+                    if (this@MainActivity.isDestroyed) {
+                        return;
+                    } else {
+                        Glide.with(this@MainActivity).load(infoUser.userImage).into(sidebarHeader.imageProfile)
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MainActivity, error.message, Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun activeCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, IMAGE_CAPTURE_REQUEST)
+    }
+
+    private fun updateUserState(state: String) {
+        val calendar: Calendar = Calendar.getInstance()
+        val currentTime: String = DateFormat.getTimeInstance().format(calendar.time)
+        val currentDate: String = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.time)
+        val hashMap: HashMap<String, Any> = HashMap()
+        hashMap["time"] = currentTime
+        hashMap["date"] = currentDate
+        hashMap["type"] = state
+        usersRef.child(currentUserID).child("userState").updateChildren(hashMap)
     }
 
 }

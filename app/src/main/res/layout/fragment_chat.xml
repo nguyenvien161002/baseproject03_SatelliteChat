@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:configChanges="orientation|screenSize"
     tools:context=".activity.client.sidebar.ChatFragment">
 
     <LinearLayout
         android:id="@+id/main_content_component"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="65dp"
-        tools:layout_editor_absoluteY="123dp">
+        android:orientation="vertical">
 
         <!--  Users online  -->
         <LinearLayout
@@ -24,12 +23,13 @@
                 android:layout_width="58dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_marginEnd="12dp"
                 android:orientation="vertical"
                 tools:ignore="UseCompoundDrawables,UselessParent">
 
                 <ImageView
-                    android:layout_width="58dp"
-                    android:layout_height="58dp"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
                     android:background="@drawable/bg_icon_menu"
                     android:padding="18dp"
                     android:src="@drawable/ic_sharp_sentiment_satisfied"
@@ -46,33 +46,47 @@
 
             </LinearLayout>
 
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_rounded_topleft_botleft"
+                    android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/userOnlineRecyclerView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </ScrollView>
+
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userRecyclerView"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_rounded_topleft_topright"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/userRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 
-    <!--    Box contain btn logout  -->
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        tools:ignore="MissingConstraints">
 
-        <Button
-            android:id="@+id/btnSignOut"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/border_btn_sign_in"
-            android:fontFamily="@font/be_vietnam_bold"
-            android:padding="10dp"
-            android:text="@string/label_sign_out"
-            android:textColor="@color/white"
-            android:layout_alignParentBottom="true"
-            android:textStyle="bold" />
-    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
+    tools:context=".activity.client.SaveAvatarActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        tools:ignore="MissingConstraints,UseCompoundDrawables"
+        tools:layout_editor_absoluteX="15dp">
+
+        <ImageView
+            android:id="@+id/btnBackSaveAvatar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_keyboard_backspace"
+            android:contentDescription="@string/icon_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="25dp"
+            android:gravity="center"
+            android:paddingBottom="4dp"
+            android:text="@string/label_avatar"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteY="4dp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageBeforeSave"
+        android:layout_width="228dp"
+        android:layout_height="228dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="50dp"
+        app:strokeWidth="4dp"
+        android:padding="4dp"
+        app:strokeColor="@color/primary"
+        tools:ignore="MissingConstraints"
+        android:src="@drawable/avatar"
+        app:shapeAppearanceOverlay="@style/Circular"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/description_save_avatar"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnSaveAvatar"
+        android:layout_marginBottom="20dp"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteX="15dp" />
+
+    <Button
+        android:id="@+id/btnSaveAvatar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/border_btn_sign_in"
+        android:text="@string/save_avatar"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

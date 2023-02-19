@@ -6,12 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".activity.client.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/white"
         android:paddingStart="15dp"
         android:paddingTop="5dp"
         android:paddingEnd="15dp">
@@ -32,8 +34,8 @@
 
                 <ImageView
                     android:id="@+id/btnMenu"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:background="@drawable/bg_icon_menu"
                     android:contentDescription="@string/menu"
                     android:padding="8dp"
@@ -47,7 +49,7 @@
                     android:gravity="center"
                     android:text="@string/chat_part"
                     android:textColor="@color/black"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -56,19 +58,19 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/btn_camera_photo"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_toStartOf="@+id/btn_create"
+                    android:id="@+id/btnCameraPhoto"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_toStartOf="@+id/btnCreate"
                     android:background="@drawable/bg_icon_menu"
                     android:contentDescription="@string/menu"
                     android:padding="8dp"
                     android:src="@drawable/ic_baseline_camera_alt" />
 
                 <ImageView
-                    android:id="@+id/btn_create"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:id="@+id/btnCreate"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/bg_icon_menu"
@@ -84,9 +86,9 @@
         <SearchView
             android:id="@+id/input_search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/border_input_search"
             android:iconifiedByDefault="false"
             android:queryBackground="@android:color/transparent"
@@ -94,6 +96,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:background="@color/white"
             android:layout_height="match_parent">
 
             <FrameLayout
@@ -105,6 +108,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:menu="@menu/navigation_bottom"
+                android:backgroundTint="@color/white"
+                android:queryBackground="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
+                tools:ignore="MissingConstraints">
+
+            </com.google.android.material.bottomnavigation.BottomNavigationView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
@@ -114,6 +129,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/sidebar_header" />
+        app:headerLayout="@layout/sidebar_header" >
+
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

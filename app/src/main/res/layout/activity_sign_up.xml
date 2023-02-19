@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     tools:context=".activity.authentication.SignUpActivity">
 
     <ScrollView
+        android:id="@+id/scrollViewSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="UselessParent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,10 +27,10 @@
                 android:id="@+id/logo_main"
                 android:layout_width="200dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/logo"
-                android:contentDescription="@string/logo_description" />
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/logo_description"
+                app:srcCompat="@drawable/logo" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -64,10 +67,10 @@
                     android:layout_height="60dp"
                     android:layout_marginStart="5dp"
                     android:background="@drawable/border_social"
+                    android:contentDescription="@string/logo_facebook"
                     android:padding="10dp"
                     android:radius="50dp"
-                    android:src="@drawable/facebook"
-                    android:contentDescription="@string/logo_facebook" />
+                    android:src="@drawable/facebook" />
             </LinearLayout>
 
             <TextView
@@ -87,72 +90,72 @@
                 android:id="@+id/inputUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints=""
                 android:background="@drawable/border_input"
+                android:fontFamily="@font/be_vietnam_bold"
                 android:hint="@string/label_username"
                 android:inputType="text"
                 android:padding="14dp"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:autofillHints=""
-                android:fontFamily="@font/be_vietnam_bold"/>
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/inputEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:autofillHints=""
                 android:background="@drawable/border_input"
+                android:fontFamily="@font/be_vietnam_bold"
                 android:hint="@string/label_email"
                 android:inputType="textEmailAddress"
                 android:padding="14dp"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:autofillHints=""
-                android:fontFamily="@font/be_vietnam_bold"/>
+                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginTop="10dp"
-                app:passwordToggleEnabled="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:hintEnabled="false">
+                android:layout_marginTop="10dp"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true">
 
                 <EditText
                     android:id="@+id/inputPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autofillHints=""
                     android:background="@drawable/border_input"
-                    android:inputType="textPassword"
+                    android:drawableEnd="@drawable/ic_outline_visibility_24"
+                    android:fontFamily="@font/be_vietnam_bold"
                     android:hint="@string/label_password"
+                    android:inputType="textPassword"
                     android:padding="14dp"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/be_vietnam_bold"
-                    android:drawableEnd="@drawable/ic_outline_visibility_24"
-                    android:autofillHints="" />
+                    android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginTop="10dp"
-                app:passwordToggleEnabled="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:hintEnabled="false">
+                android:layout_marginTop="10dp"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true">
 
                 <EditText
                     android:id="@+id/inputConfirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autofillHints=""
                     android:background="@drawable/border_input"
-                    android:inputType="textPassword"
+                    android:drawableEnd="@drawable/ic_outline_visibility_24"
+                    android:fontFamily="@font/be_vietnam_bold"
                     android:hint="@string/label_confirm_password"
+                    android:inputType="textPassword"
                     android:padding="14dp"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/be_vietnam_bold"
-                    android:drawableEnd="@drawable/ic_outline_visibility_24"
-                    android:autofillHints="" />
+                    android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -166,32 +169,32 @@
 
                 <Button
                     android:id="@+id/btnSignUp"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="0.5"
-                    android:padding="14dp"
-                    android:text="@string/label_btn_sign_up"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
                     android:background="@drawable/border_btn_sign_in"
                     android:fontFamily="@font/be_vietnam_bold"
-                    style="?android:attr/buttonBarButtonStyle" />
+                    android:padding="14dp"
+                    android:text="@string/label_btn_sign_up"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/btnSignIn"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_weight="0.5"
-                    android:padding="14dp"
-                    android:text="@string/label_btn_sign_in"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/primary"
                     android:background="@drawable/border_btn_sign_up"
                     android:fontFamily="@font/be_vietnam_bold"
-                    style="?android:attr/buttonBarButtonStyle" />
+                    android:padding="14dp"
+                    android:text="@string/label_btn_sign_in"
+                    android:textColor="@color/primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -199,15 +202,15 @@
                 android:id="@+id/policy_terms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:text="@string/policy_terms"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="14sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"/>
+                android:textSize="14sp" />
 
         </LinearLayout>
 
     </ScrollView>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

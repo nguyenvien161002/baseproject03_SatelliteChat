@@ -1,3 +1,8 @@
 package com.example.satellitechat.model
 
-data class User constructor(val userName: String, val userImage: String )
+data class User (
+    var userId: String = "",
+    var userName: String = "",
+    var userImage: String = "",
+    var userState: Any = ""
+)

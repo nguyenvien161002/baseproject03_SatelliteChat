@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">SatelliteApp</string>
+    <string name="app_author">Nguyễn Văn Viên</string>
     <string name="label_sign_in">Đăng nhập vào Satellite</string>
     <string name="label_sign_up">Đăng ký tài khoản vào Satellite</string>
     <string name="label_sign_in_with_email_password">Hoặc đăng nhập với email và mật khẩu của bạn:</string>
@@ -30,7 +31,6 @@
     <string name="archives">Kho lưu trữ</string>
     <string name="community">Cộng đồng</string>
     <string name="label_edit">CHỈNH SỬA</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="arrow_down">arrow down</string>
     <string name="icon_user">icon_user</string>
@@ -54,4 +54,20 @@
     <string name="account_transfer">Chuyển tài khoản</string>
     <string name="report_problem">Báo cáo sự cố</string>
     <string name="help">TRợ giúp</string>
+    <string name="call">Cuộc gọi</string>
+    <string name="news">Tin</string>
+    <string name="switch_account">Chuyển tài khoản</string>
+    <string name="maximum_5_switch_account">Bạn có thể thêm tối da 5 tài khoản trên thiết bị này cũng như chuyển từ tài khoản này sang tài khoản khác và xem tin nhắn.</string>
+    <string name="tick">tick</string>
+    <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
+    <string name="temp_time">12:23</string>
+    <string name="add_account">Thêm tài khoản</string>
+    <string name="icon_fb">icon_fb</string>
+    <string name="icon_gg">icon_gg</string>
+    <string name="description_save_avatar">Hệ thống sẽ cập nhật ảnh đại diện của bạn trên trang cá nhân. Điểm cập nhật này sẽ không được chia sẽ trên bảng feed.</string>
+    <string name="label_avatar">Ảnh đại diện</string>
+    <string name="save_avatar">Lưu ảnh đại diện</string>
+    <string name="loading">Đang xử lý...</string>
+    <string name="logged">Đã đăng nhập</string>
+    <string name="texting">Nhắn tin...</string>
 </resources>
