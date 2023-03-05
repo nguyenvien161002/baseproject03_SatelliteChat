@@ -1,6 +1,8 @@
 package com.example.satellitechat.activity.client
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -15,19 +17,21 @@ import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.satellitechat.R
+import com.example.satellitechat.activity.client.profile.ProfileActivity
 import com.example.satellitechat.activity.client.sidebar.ArchivesFragment
 import com.example.satellitechat.activity.client.sidebar.ChatFragment
 import com.example.satellitechat.activity.client.sidebar.MarketPlaceFragment
 import com.example.satellitechat.activity.client.sidebar.MessageWaitingFragment
+import com.example.satellitechat.activity.client.switchAccounts.SwitchAccountsActivity
 import com.example.satellitechat.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sidebar_header.view.*
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 
@@ -36,19 +40,21 @@ class MainActivity : AppCompatActivity() {
     private var BACK_PRESS_TIME: Long = 0;
     private var IMAGE_CAPTURE_REQUEST: Int = 3000
     private var IMAGE_PERMISSION: Int = 3001
-    private var currentUserID: String = ""
+    private var currentUserId: String = ""
     private lateinit var auth: FirebaseAuth
     private lateinit var fToast: Toast
     private lateinit var sidebarHeader: View
     private lateinit var usersRef: DatabaseReference
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         auth = Firebase.auth
-        currentUserID = auth.currentUser!!.uid
         usersRef = FirebaseDatabase.getInstance().getReference("Users")
+        sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
+        currentUserId = sharedPreferences.getString("userId", "").toString()
 
         btnMenu.setOnClickListener {
             drawer_layout_main.openDrawer(GravityCompat.START)
@@ -114,6 +120,7 @@ class MainActivity : AppCompatActivity() {
         sidebarHeader.box_account.setOnClickListener {
             val intent = Intent(this, SwitchAccountsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.putExtra("userId", currentUserId)
             startActivity(intent)
             finish()
         }
@@ -157,11 +164,28 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        getUserForSidebar(currentUserID)
-        updateUserState("online")
-        usersRef.child(currentUserID)
-            .child("userState").child("type")
-            .onDisconnect().setValue("offline")
+        getUserForSidebar(currentUserId)
+        val hashMap = getCurrentCalender()
+        updateUserState("online", hashMap)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val hashMap = getCurrentCalender()
+        hashMap["type"] = "offline"
+        usersRef.child(currentUserId).child("userState").onDisconnect().setValue(hashMap)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentCalender(): HashMap<String, Any> {
+        val dateFormat = SimpleDateFormat("E, dd/MM/yyyy")
+        val timeFormat = SimpleDateFormat("hh:mm:ss a")
+        val currentTime: String = timeFormat.format(System.currentTimeMillis())
+        val currentDate: String = dateFormat.format(System.currentTimeMillis())
+        val hashMap: HashMap<String, Any> = HashMap()
+        hashMap["time"] = currentTime
+        hashMap["date"] = currentDate
+        return hashMap
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -210,15 +234,9 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent, IMAGE_CAPTURE_REQUEST)
     }
 
-    private fun updateUserState(state: String) {
-        val calendar: Calendar = Calendar.getInstance()
-        val currentTime: String = DateFormat.getTimeInstance().format(calendar.time)
-        val currentDate: String = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.time)
-        val hashMap: HashMap<String, Any> = HashMap()
-        hashMap["time"] = currentTime
-        hashMap["date"] = currentDate
+    private fun updateUserState(state: String, hashMap: HashMap<String, Any>) {
         hashMap["type"] = state
-        usersRef.child(currentUserID).child("userState").updateChildren(hashMap)
+        usersRef.child(currentUserId).child("userState").updateChildren(hashMap)
     }
 
 }

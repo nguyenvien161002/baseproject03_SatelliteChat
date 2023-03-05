@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingStart="15dp"
     android:paddingEnd="15dp"
-    tools:context=".activity.client.ProfileActivity">
+    tools:context=".activity.client.profile.ProfileActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"

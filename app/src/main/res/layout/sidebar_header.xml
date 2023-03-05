@@ -27,6 +27,7 @@
                 android:layout_width="54dp"
                 android:layout_height="54dp"
                 android:padding="2dp"
+                app:strokeColor="@null"
                 android:src="@drawable/avatar"
                 app:shapeAppearanceOverlay="@style/Circular" />
 

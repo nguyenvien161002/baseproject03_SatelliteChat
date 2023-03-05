@@ -18,6 +18,7 @@
             android:layout_height="50dp"
             android:contentDescription="@string/username"
             android:src="@drawable/avatar"
+            app:strokeColor="@null"
             app:shapeAppearanceOverlay="@style/Circular"/>
 
         <RelativeLayout

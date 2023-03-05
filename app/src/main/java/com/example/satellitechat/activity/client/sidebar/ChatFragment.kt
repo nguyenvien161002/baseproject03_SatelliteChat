@@ -1,11 +1,13 @@
 package com.example.satellitechat.activity.client.sidebar
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.satellitechat.R
@@ -16,22 +18,25 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
-
 import kotlinx.android.synthetic.main.fragment_chat.view.*
 
 class ChatFragment : Fragment() {
 
     private val userChatList = ArrayList<User>()
     private val userOnlineList = ArrayList<User>()
+    private var currentUserId: String = ""
     private lateinit var userChatAdapter: UserChatAdapter
     private lateinit var userOnlineAdapter: UserOnlineAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var usersRef: DatabaseReference
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_chat, container, false);
         auth = Firebase.auth
         usersRef = FirebaseDatabase.getInstance().getReference("Users")
+        sharedPreferences = requireContext().getSharedPreferences("is_sign_in", AppCompatActivity.MODE_PRIVATE)
+        currentUserId = sharedPreferences.getString("userId", "").toString()
 
         // Get user chat box
         view.userRecyclerView.layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
@@ -40,7 +45,7 @@ class ChatFragment : Fragment() {
                 userChatList.clear()
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
                     val user = dataSnapshot.getValue(User::class.java)
-                    if(user!!.userId != auth.currentUser!!.uid) {
+                    if(user!!.userId != currentUserId) {
                         userChatList.add(user)
                     }
                 }
@@ -60,7 +65,7 @@ class ChatFragment : Fragment() {
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
                     val user = dataSnapshot.getValue(User::class.java)
                     val type = dataSnapshot.child("userState").child("type").value
-                    if(user!!.userId != auth.currentUser!!.uid && type == "online") {
+                    if(user!!.userId != currentUserId && type == "online") {
                         userOnlineList.add(user)
                     }
                 }
@@ -74,7 +79,6 @@ class ChatFragment : Fragment() {
 
         return view;
     }
-
 
 }
 

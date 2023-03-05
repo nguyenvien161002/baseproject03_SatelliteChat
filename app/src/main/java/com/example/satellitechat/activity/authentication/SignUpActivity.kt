@@ -95,6 +95,7 @@ class SignUpActivity : AppCompatActivity() {
                                 hashMap["userEmail"] = email
                                 hashMap["userImage"] = ""
                                 hashMap["password"] = password
+                                hashMap["methodSignIn"] = "account"
                                 databaseRef = FirebaseDatabase.getInstance().reference.child("Users").child(userId)
                                 databaseRef.setValue(hashMap).addOnCompleteListener(this) {
                                     if (it.isSuccessful) {

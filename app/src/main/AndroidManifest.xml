@@ -17,28 +17,28 @@
         android:theme="@style/Theme.Light"
         tools:targetApi="31">
         <activity
-            android:name=".activity.client.ChatActivity"
+            android:name=".activity.client.chat.ChatActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".activity.client.SaveAvatarActivity"
+            android:name=".activity.client.saveAvatar.SaveAvatarActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".activity.client.SwitchAccountsActivity"
+            android:name=".activity.client.switchAccounts.SwitchAccountsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".activity.client.ProfileActivity"
+            android:name=".activity.client.profile.ProfileActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

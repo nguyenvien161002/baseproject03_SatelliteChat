@@ -64,7 +64,7 @@ open class SignInActivity : AppCompatActivity() {
                         if(it.isSuccessful) {
                             val isVerify = auth.currentUser?.isEmailVerified
                             if(isVerify == true) {
-                                setSignIn()
+                                setSignIn(auth.currentUser!!.uid)
                                 startActivity(Intent(this, MainActivity::class.java))
                                 dialog.dismiss()
                                 Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
@@ -124,10 +124,9 @@ open class SignInActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
         sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
         val getIsSignIn = sharedPreferences.getString("is_sign_in", "")
-        if(getIsSignIn == "true" && currentUser != null) {
+        if(getIsSignIn == "true") {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
@@ -141,15 +140,17 @@ open class SignInActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    private fun setSignIn() {
+    private fun setSignIn(userId: String) {
         sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
         editor = sharedPreferences.edit()
         editor.putString("is_sign_in", "true")
+        editor.putString("method_sign_in", "account")
+        editor.putString("userId", userId)
         editor.apply()
     }
 
     private fun validator(email: EditText, password: EditText): Boolean {
-        val error: String = "Vui lòng nhập trường này!"
+        val error = "Vui lòng nhập trường này!"
         if(email.text.toString().isEmpty()) {
             email.error = error
             return false
