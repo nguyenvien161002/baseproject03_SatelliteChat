@@ -2,7 +2,6 @@ package com.example.satellitechat.activity.client.profile
 
 import android.app.Dialog
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -15,6 +14,8 @@ import com.example.satellitechat.R
 import com.example.satellitechat.activity.client.MainActivity
 import com.example.satellitechat.activity.client.saveAvatar.SaveAvatarActivity
 import com.example.satellitechat.model.User
+import com.example.satellitechat.utilities.constants.Constants
+import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -29,8 +30,6 @@ import kotlin.collections.HashMap
 
 class ProfileActivity : AppCompatActivity() {
 
-    private var IMAGE_REQUEST: Int = 2002
-    private var IMAGE_RESPONSE: Int = 2003
     private var currentUserId: String = ""
     private lateinit var filePath: Uri
     private lateinit var bitmap: Bitmap
@@ -40,7 +39,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var usersRef: DatabaseReference
     private lateinit var storageReference: StorageReference
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var preferenceManager: PreferenceManager
     private lateinit var byteArrayOutputStream: ByteArrayOutputStream
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,8 +47,8 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         auth = Firebase.auth
-        sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
-        currentUserId = sharedPreferences.getString("userId", "").toString()
+        preferenceManager = PreferenceManager(this@ProfileActivity)
+        currentUserId = preferenceManager.getCurrentId().toString()
         storage = FirebaseStorage.getInstance()
         usersRef = FirebaseDatabase.getInstance().getReference("Users")
 
@@ -73,7 +72,7 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == IMAGE_REQUEST && resultCode != IMAGE_RESPONSE) {
+        if (requestCode == Constants.CHOOSE_IMAGE_REQUEST && resultCode != Constants.CHOOSE_IMAGE_RESPONSE) {
             filePath = data!!.data!!
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
@@ -82,12 +81,12 @@ class ProfileActivity : AppCompatActivity() {
                 byteArray = byteArrayOutputStream.toByteArray()
                 val intent = Intent(this@ProfileActivity, SaveAvatarActivity::class.java)
                 intent.putExtra("BitmapAvatar", byteArray)
-                startActivityForResult(intent, IMAGE_REQUEST)
+                startActivityForResult(intent, Constants.CHOOSE_IMAGE_REQUEST)
             } catch (error: IOException) {
                 Toast.makeText(this@ProfileActivity, error.message, Toast.LENGTH_LONG).show()
             }
         }
-        if (requestCode == IMAGE_REQUEST && resultCode == IMAGE_RESPONSE) {
+        if (requestCode == Constants.CHOOSE_IMAGE_REQUEST && resultCode == Constants.CHOOSE_IMAGE_RESPONSE) {
             dialog.show()
             uploadImageDatabase()
         }
@@ -108,7 +107,7 @@ class ProfileActivity : AppCompatActivity() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Chọn ảnh đại diện"), IMAGE_REQUEST)
+        startActivityForResult(Intent.createChooser(intent, "Chọn ảnh đại diện"), Constants.CHOOSE_IMAGE_REQUEST)
     }
 
     private fun uploadImageDatabase() {

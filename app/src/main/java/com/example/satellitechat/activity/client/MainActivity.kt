@@ -1,17 +1,19 @@
 package com.example.satellitechat.activity.client
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
@@ -24,37 +26,35 @@ import com.example.satellitechat.activity.client.sidebar.MarketPlaceFragment
 import com.example.satellitechat.activity.client.sidebar.MessageWaitingFragment
 import com.example.satellitechat.activity.client.switchAccounts.SwitchAccountsActivity
 import com.example.satellitechat.model.User
+import com.example.satellitechat.utilities.constants.Constants
+import com.example.satellitechat.utilities.preference.PreferenceManager
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sidebar_header.view.*
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Calendar
 
 
 class MainActivity : AppCompatActivity() {
 
-    private var BACK_PRESS_TIME: Long = 0;
-    private var IMAGE_CAPTURE_REQUEST: Int = 3000
-    private var IMAGE_PERMISSION: Int = 3001
+    private var backPressedTime: Long = 0
     private var currentUserId: String = ""
-    private lateinit var auth: FirebaseAuth
-    private lateinit var fToast: Toast
     private lateinit var sidebarHeader: View
     private lateinit var usersRef: DatabaseReference
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var preferenceManager: PreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        auth = Firebase.auth
         usersRef = FirebaseDatabase.getInstance().getReference("Users")
-        sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
-        currentUserId = sharedPreferences.getString("userId", "").toString()
+        preferenceManager = PreferenceManager(this@MainActivity)
+        currentUserId = preferenceManager.getCurrentId().toString()
+        checkPermissions(Constants.NOTIFICATION_PERMISSION)
 
         btnMenu.setOnClickListener {
             drawer_layout_main.openDrawer(GravityCompat.START)
@@ -125,39 +125,69 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        btnCameraPhoto.setOnClickListener {
-            if(ActivityCompat.checkSelfPermission(this@MainActivity, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
-                ActivityCompat.requestPermissions(this@MainActivity, arrayOf(android.Manifest.permission.CAMERA), IMAGE_PERMISSION)
+        btnVideoCallPlus.setOnClickListener {
+            checkPermissions(Constants.CAMERA_PERMISSION)
+        }
+
+    }
+
+    private fun checkPermissions(permission: String) {
+        if (permission == Constants.CAMERA_PERMISSION) {
+            if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
+                ActivityCompat.requestPermissions(
+                    this@MainActivity,
+                    arrayOf(Manifest.permission.CAMERA),
+                    Constants.CAMERA_PERMISSION_REQUEST
+                )
             } else {
                 activeCamera()
+            }
+        } else if (permission == Constants.NOTIFICATION_PERMISSION) {
+            if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    this@MainActivity,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    Constants.NOTIFICATION_PERMISSION_REQUEST
+                )
+            }
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        val currentTime = System.currentTimeMillis()
+        val interval = currentTime - backPressedTime
+
+        if (interval < 2000) {
+            super.onBackPressed()
+        } else {
+            Toast.makeText(this, "Nhấn quay lại một lần nữa để thoát ứng dụng", Toast.LENGTH_SHORT).show()
+            backPressedTime = currentTime
+        }
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            Constants.CAMERA_PERMISSION_REQUEST -> {
+                // Agree to allow the use
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    activeCamera()
+                } else { // Do not agree to allow the use
+                    Toast.makeText(this@MainActivity, "Bạn đã từ chối quyền truy cập camera", Toast.LENGTH_LONG).show()
+                }
+                return
             }
         }
 
     }
 
-    override fun onBackPressed() {
-        if((BACK_PRESS_TIME + 2000) > System.currentTimeMillis()) {
-            fToast.cancel()
-            super.onBackPressed()
-            return
-        } else {
-            fToast = Toast.makeText(this, "Nhấn quay lại một lần nữa để thoát ứng dụng", Toast.LENGTH_LONG)
-            fToast.show()
-        }
-        BACK_PRESS_TIME = System.currentTimeMillis()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == IMAGE_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            activeCamera()
-        }
-    }
-
     // CAMERA CAPTURE CHAT FRAGMENT
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == IMAGE_CAPTURE_REQUEST && resultCode != null) {
+        if(requestCode == Constants.IMAGE_CAPTURE_REQUEST && resultCode != null) {
             val bitmap: Bitmap? = data!!.getParcelableExtra<Bitmap>("data")
         }
     }
@@ -167,6 +197,7 @@ class MainActivity : AppCompatActivity() {
         getUserForSidebar(currentUserId)
         val hashMap = getCurrentCalender()
         updateUserState("online", hashMap)
+        sendFCMTokenToDatabase()
     }
 
     override fun onStop() {
@@ -178,7 +209,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SimpleDateFormat")
     private fun getCurrentCalender(): HashMap<String, Any> {
-        val dateFormat = SimpleDateFormat("E, dd/MM/yyyy")
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val timeFormat = SimpleDateFormat("hh:mm:ss a")
         val currentTime: String = timeFormat.format(System.currentTimeMillis())
         val currentDate: String = dateFormat.format(System.currentTimeMillis())
@@ -211,6 +242,7 @@ class MainActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val infoUser = snapshot.getValue(User::class.java)
                 sidebarHeader.userName.text = infoUser!!.userName
+                preferenceManager.setNameAndImage(infoUser.userName, infoUser.userImage)
                 if (infoUser.userImage == "") {
                     sidebarHeader.imageProfile.setImageResource(R.drawable.profile_image)
                     sidebarHeader.imageProfile.strokeWidth = 2F
@@ -231,13 +263,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun activeCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, IMAGE_CAPTURE_REQUEST)
+        startActivityForResult(intent, Constants.IMAGE_CAPTURE_REQUEST)
     }
 
     private fun updateUserState(state: String, hashMap: HashMap<String, Any>) {
         hashMap["type"] = state
         usersRef.child(currentUserId).child("userState").updateChildren(hashMap)
     }
+    
+    private fun sendFCMTokenToDatabase() {
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener( OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("FCM fail", "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+                // Get token success
+                usersRef.child(currentUserId).child("fcmToken").setValue(task.result)
+            })
+    }
+
 
 }
 

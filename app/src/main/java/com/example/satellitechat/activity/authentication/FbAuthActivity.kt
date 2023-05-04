@@ -1,10 +1,10 @@
 package com.example.satellitechat.activity.authentication
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import com.example.satellitechat.activity.client.MainActivity
+import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -22,9 +22,8 @@ class FbAuthActivity : SignInActivity() {
 
     private lateinit var callbackManager: CallbackManager
     private lateinit var auth: FirebaseAuth
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
     private lateinit var userRef: DatabaseReference
+    private lateinit var preferenceManager: PreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +46,9 @@ class FbAuthActivity : SignInActivity() {
                         userRef.child(jsonObject.getString("id")).setValue(hashMap)
                             .addOnCompleteListener(this@FbAuthActivity) {
                                 if (it.isSuccessful) {
-                                    sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
-                                    editor = sharedPreferences.edit()
-                                    editor.putString("is_sign_in", "true")
-                                    editor.putString("method_sign_in", "google")
-                                    editor.putString("userId", jsonObject.getString("id"))
-                                    editor.apply()
+                                    preferenceManager = PreferenceManager(this@FbAuthActivity)
+                                    preferenceManager.setSignIn(jsonObject.getString("id"))
+
                                 }
                             }
                             .addOnFailureListener(this@FbAuthActivity) {

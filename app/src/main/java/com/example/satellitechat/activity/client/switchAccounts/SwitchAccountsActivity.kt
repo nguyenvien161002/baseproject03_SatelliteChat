@@ -2,7 +2,6 @@ package com.example.satellitechat.activity.client.switchAccounts
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -18,6 +17,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.example.satellitechat.activity.authentication.SignInActivity
 import com.example.satellitechat.activity.client.MainActivity
+import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -35,9 +35,8 @@ class SwitchAccountsActivity : AppCompatActivity() {
     private var currentUserId: String = ""
     private lateinit var auth: FirebaseAuth
     private lateinit var loginManager: LoginManager
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
     private lateinit var usersRef: DatabaseReference
+    private lateinit var preferenceManager: PreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +46,8 @@ class SwitchAccountsActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         // Check user method sign in application
-        sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
-        currentUserId = sharedPreferences.getString("userId", "").toString()
+        preferenceManager = PreferenceManager(this@SwitchAccountsActivity)
+        currentUserId = preferenceManager.getCurrentId().toString()
         usersRef = FirebaseDatabase.getInstance().getReference("Users")
 
         // Logout account
@@ -56,9 +55,7 @@ class SwitchAccountsActivity : AppCompatActivity() {
         btnSignOut.setOnClickListener {
             auth.signOut()
             loginManager.logOut()
-            editor = sharedPreferences.edit()
-            editor.putString("is_sign_in", "false")
-            editor.apply()
+            preferenceManager.logOut()
             updateUserState()
             startActivity(Intent(this@SwitchAccountsActivity, SignInActivity::class.java))
             finish()
@@ -98,7 +95,7 @@ class SwitchAccountsActivity : AppCompatActivity() {
 
     @SuppressLint("SimpleDateFormat")
     private fun updateUserState() {
-        val dateFormat = SimpleDateFormat("E, dd/MM/yyyy")
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val timeFormat = SimpleDateFormat("hh:mm:ss a")
         val currentTime: String = timeFormat.format(System.currentTimeMillis())
         val currentDate: String = dateFormat.format(System.currentTimeMillis())
@@ -107,6 +104,7 @@ class SwitchAccountsActivity : AppCompatActivity() {
         hashMap["date"] = currentDate
         hashMap["type"] = "offline"
         usersRef.child(currentUserId).child("userState").updateChildren(hashMap)
+        usersRef.child(currentUserId).child("fcmToken").setValue(null)
     }
 
 }

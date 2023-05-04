@@ -3,7 +3,6 @@ package com.example.satellitechat.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +10,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.satellitechat.R
 import com.example.satellitechat.activity.client.chat.ChatActivity
-import com.example.satellitechat.model.SingleChat
+import com.example.satellitechat.model.Message
 import com.example.satellitechat.model.User
+import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
@@ -30,7 +29,7 @@ class UserChatAdapter (private val context: Context, private val userList: Array
     private var currentUserId = ""
     private lateinit var usersRef: DatabaseReference
     private lateinit var singleChatsRef: DatabaseReference
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var preferenceManager: PreferenceManager
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_box_chat, parent, false)
@@ -99,26 +98,26 @@ class UserChatAdapter (private val context: Context, private val userList: Array
     }
 
     private fun lastMessage(receiverId: String, lastMessage: TextView, lastTime: TextView) {
-        sharedPreferences = context.getSharedPreferences("is_sign_in", AppCompatActivity.MODE_PRIVATE)
-        currentUserId = sharedPreferences.getString("userId", "").toString()
+        preferenceManager = PreferenceManager(context)
+        currentUserId = preferenceManager.getCurrentId().toString()
         singleChatsRef = FirebaseDatabase.getInstance().getReference("Single Chats")
         singleChatsRef.addValueEventListener(object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
-                    val singleChat = dataSnapshot.getValue(SingleChat::class.java)!!
-                    if (singleChat.senderId == currentUserId && singleChat.receiverId == receiverId ||
-                        singleChat.senderId == receiverId && singleChat.receiverId == currentUserId) {
-                        if (singleChat.senderId == currentUserId) {
-                            val iSend = "Bạn: " + singleChat.message
+                    val message = dataSnapshot.getValue(Message::class.java)!!
+                    if (message.senderId == currentUserId && message.receiverId == receiverId ||
+                        message.senderId == receiverId && message.receiverId == currentUserId) {
+                        if (message.senderId == currentUserId) {
+                            val iSend = "Bạn: " + message.message
                             lastMessage.text = iSend
                         } else {
-                            lastMessage.text = singleChat.message
+                            lastMessage.text = message.message
                         }
                         val timeData = dataSnapshot.child("timeStamp").child("time").value
                         val dateData = dataSnapshot.child("timeStamp").child("date").value
                         val timeFull = dateData.toString() + " " + timeData.toString()
-                        val simpleDateFormat = SimpleDateFormat("E, dd/MM/yyyy hh:mm:ss a", Locale.US)
+                        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss a", Locale.US)
                         val timeParse = simpleDateFormat.parse(timeFull)!!
                         val time = timeParse.time
                         val timeFormat = SimpleDateFormat("hh:mm")

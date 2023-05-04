@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SatelliteApp</string>
-    <string name="app_author">Nguyễn Văn Viên</string>
+    <string name="app_author">NGUYỄN VĂN VIÊN</string>
     <string name="label_sign_in">Đăng nhập vào Satellite</string>
     <string name="label_sign_up">Đăng ký tài khoản vào Satellite</string>
     <string name="label_sign_in_with_email_password">Hoặc đăng nhập với email và mật khẩu của bạn:</string>
@@ -34,7 +34,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="arrow_down">arrow down</string>
     <string name="icon_user">icon_user</string>
-    <string name="set_state">Đặt trạng thái</string>
+    <string name="set_state">Leave a note</string>
     <string name="set_custom_state">Đặt trạng thái tùy chỉnh</string>
     <string name="dark_mode">Chế độ tối</string>
     <string name="active_status">Trạng thái hoạt động</string>
@@ -71,4 +71,17 @@
     <string name="loading">Đang xử lý...</string>
     <string name="logged">Đã đăng nhập</string>
     <string name="texting">Nhắn tin...</string>
+    <string name="calling">Calling...</string>
+    <string name="audio_call_from_satellitechat">Audio call from SatelliteChat</string>
+    <string name="reply">REPLY</string>
+    <string name="answer">ANSWER</string>
+    <string name="decline">DECLINE</string>
+    <string name="call_notification">Có cuộc gọi đến từ SatelliteChat</string>
+    <string name="call_back">CALL BACK</string>
+    <string name="_1_45_am">1:45 AM</string>
+    <string name="audio_call">Audio Call</string>
+    <string name="video_call">Video Call</string>
+    <string name="emoji_icon_text">😁😁</string>
+    <string name="label_messages">Messages</string>
+    <string name="label_requests">Requests</string>
 </resources>

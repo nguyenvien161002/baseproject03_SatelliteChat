@@ -22,4 +22,9 @@
     <color name="pink">#FF1493</color>
     <color name="orange">#FF8C00</color>
     <color name="send">#9900E6</color>
+    <color name="out_going_call_start">#00A8A8</color>
+    <color name="out_going_call_end">#00FFFF</color>
+    <color name="incoming_call_start">#FFD700</color>
+    <color name="incoming_call_end">#FFA500</color>
+    <color name="out_going_call_toolbar">#99000000</color>
 </resources>

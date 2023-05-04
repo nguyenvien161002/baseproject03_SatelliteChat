@@ -2,16 +2,15 @@ package com.example.satellitechat.activity.authentication
 
 import android.app.Dialog
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Patterns
-import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.satellitechat.R
 import com.example.satellitechat.activity.client.MainActivity
+import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -20,9 +19,8 @@ import kotlinx.android.synthetic.main.activity_sign_in.*
 open class SignInActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
     private lateinit var dialog: Dialog
+    private lateinit var preferenceManager: PreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,12 +42,11 @@ open class SignInActivity : AppCompatActivity() {
         }
 
         // Check user has been every password not
-        sharedPreferences = getSharedPreferences("remember_me", MODE_PRIVATE)
-        val getEmail = sharedPreferences.getString("user_email", "")
-        val getPassword = sharedPreferences.getString("password", "")
-        if(getEmail != null && getPassword != null) {
-            inputEmail.setText(getEmail)
-            inputPassword.setText(getPassword)
+        preferenceManager = PreferenceManager(this@SignInActivity)
+        val isRememberMe = preferenceManager.getRememberMe()
+        if(isRememberMe.size != 0) {
+            inputEmail.setText(isRememberMe[0])
+            inputPassword.setText(isRememberMe[1])
         }
 
         // Authentication sign in account
@@ -64,7 +61,7 @@ open class SignInActivity : AppCompatActivity() {
                         if(it.isSuccessful) {
                             val isVerify = auth.currentUser?.isEmailVerified
                             if(isVerify == true) {
-                                setSignIn(auth.currentUser!!.uid)
+                                preferenceManager.setSignIn(auth.currentUser!!.uid)
                                 startActivity(Intent(this, MainActivity::class.java))
                                 dialog.dismiss()
                                 Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
@@ -81,9 +78,9 @@ open class SignInActivity : AppCompatActivity() {
                     }
 
                 if(remember_me.isChecked) {
-                    setRememberMe(email, password)
+                    preferenceManager.setRememberMe(email, password)
                 } else {
-                    setRememberMe("", "")
+                    preferenceManager.setRememberMe("", "")
                 }
             }
         }
@@ -124,29 +121,10 @@ open class SignInActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
-        val getIsSignIn = sharedPreferences.getString("is_sign_in", "")
-        if(getIsSignIn == "true") {
+        if(preferenceManager.getIsSignIn() == "true") {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
-    }
-
-    private fun setRememberMe(email: String, password: String) {
-        sharedPreferences = getSharedPreferences("remember_me", MODE_PRIVATE)
-        editor = sharedPreferences.edit()
-        editor.putString("user_email", email)
-        editor.putString("password", password)
-        editor.apply()
-    }
-
-    private fun setSignIn(userId: String) {
-        sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
-        editor = sharedPreferences.edit()
-        editor.putString("is_sign_in", "true")
-        editor.putString("method_sign_in", "account")
-        editor.putString("userId", userId)
-        editor.apply()
     }
 
     private fun validator(email: EditText, password: EditText): Boolean {

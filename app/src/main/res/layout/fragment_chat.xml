@@ -20,20 +20,25 @@
             android:layout_marginBottom="10dp">
 
             <LinearLayout
-                android:layout_width="58dp"
+                android:layout_width="74dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_marginEnd="8dp"
                 android:orientation="vertical"
                 tools:ignore="UseCompoundDrawables,UselessParent">
 
-                <ImageView
-                    android:layout_width="54dp"
-                    android:layout_height="54dp"
-                    android:background="@drawable/bg_icon_menu"
-                    android:padding="18dp"
-                    android:src="@drawable/ic_sharp_sentiment_satisfied"
-                    android:contentDescription="@string/icon_user" />
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageUserOnline"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:contentDescription="@string/username"
+                    android:src="@drawable/avatar"
+                    android:padding="2dp"
+                    app:strokeColor="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:shapeAppearanceOverlay="@style/Circular"
+                    tools:ignore="MissingConstraints" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -42,7 +47,7 @@
                     android:textSize="12sp"
                     android:text="@string/set_state"
                     android:textAlignment="center"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black_500" />
 
             </LinearLayout>
 
@@ -66,10 +71,39 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/label_messages"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/btnRequests"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_requests"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="10dp"
+                android:elevation="2dp"
+                android:textSize="15sp"
+                android:textColor="@color/blue"/>
+
+        </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="5dp"
+            android:layout_marginTop="10dp"
             android:scrollbars="none">
 
             <LinearLayout
@@ -82,11 +116,23 @@
                     android:id="@+id/userRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
             </LinearLayout>
 
         </ScrollView>
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBarChatBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

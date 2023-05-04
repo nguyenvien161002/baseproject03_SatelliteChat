@@ -1,23 +1,24 @@
 package com.example.satellitechat.activity.client.sidebar
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.satellitechat.R
 import com.example.satellitechat.adapter.UserChatAdapter
 import com.example.satellitechat.adapter.UserOnlineAdapter
 import com.example.satellitechat.model.User
+import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_chat.view.*
 
 class ChatFragment : Fragment() {
@@ -29,14 +30,15 @@ class ChatFragment : Fragment() {
     private lateinit var userOnlineAdapter: UserOnlineAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var usersRef: DatabaseReference
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var preferenceManager: PreferenceManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_chat, container, false);
         auth = Firebase.auth
         usersRef = FirebaseDatabase.getInstance().getReference("Users")
-        sharedPreferences = requireContext().getSharedPreferences("is_sign_in", AppCompatActivity.MODE_PRIVATE)
-        currentUserId = sharedPreferences.getString("userId", "").toString()
+        preferenceManager = PreferenceManager(requireContext())
+        currentUserId = preferenceManager.getCurrentId().toString()
+        view.progressBarChatBox.visibility = ProgressBar.VISIBLE
 
         // Get user chat box
         view.userRecyclerView.layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
@@ -51,6 +53,7 @@ class ChatFragment : Fragment() {
                 }
                 userChatAdapter = UserChatAdapter(view.context, userChatList)
                 view.userRecyclerView.adapter = userChatAdapter
+                view.progressBarChatBox.visibility = ProgressBar.GONE
             }
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(view.context, error.message, Toast.LENGTH_LONG).show()

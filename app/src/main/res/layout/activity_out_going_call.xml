@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".activity.client.chat.OutGoingCallActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/localVideoView"
+            android:layout_width="140dp"
+            android:layout_height="160dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/bg_radius8_video_call"
+            android:elevation="1dp"
+            tools:ignore="MissingConstraints" />
+
+        <FrameLayout
+            android:id="@+id/remoteVideoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_out_going_call_gradient"
+            android:elevation="0dp" />
+
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fullLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="2dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            tools:ignore="MissingConstraints,UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/icon_backspace"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/icon_back"
+                android:src="@drawable/ic_sharp_keyboard_backspace_white" />
+
+            <TextView
+                android:id="@+id/recNaOnToolBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:gravity="center"
+                android:paddingBottom="4dp"
+                android:text="@string/me"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteY="4dp" />
+
+        </LinearLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageReceiver"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="200dp"
+            android:src="@drawable/avatar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/Circular"
+            app:strokeColor="@color/primary"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/receiverName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/app_author"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/imageReceiver" />
+
+        <TextView
+            android:id="@+id/calledTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/calling"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/receiverName" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_toolbar_audio_call"
+            android:padding="16dp"
+            android:weightSum="10"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/btnCameraCapture"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:padding="10dp"
+                android:src="@drawable/icons_no_video" />
+
+            <ImageView
+                android:id="@+id/btnMicrophone"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:padding="10dp"
+                android:src="@drawable/icons_microphone_white" />
+
+            <ImageView
+                android:id="@+id/btnPhotos"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:padding="10dp"
+                android:src="@drawable/icon_picture" />
+
+            <ImageView
+                android:id="@+id/btnLoudspeaker"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:padding="10dp"
+                android:src="@drawable/icons_loudspeaker" />
+
+            <ImageView
+                android:id="@+id/cancelAudioCall"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/boder_turn_off_call_phone"
+                android:padding="10dp"
+                android:src="@drawable/icons_phone_white" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

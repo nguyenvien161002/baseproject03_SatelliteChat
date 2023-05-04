@@ -7,11 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.satellitechat.R
 import com.example.satellitechat.activity.client.profile.ProfileActivity
+import com.example.satellitechat.utilities.constants.Constants
 import kotlinx.android.synthetic.main.activity_save_avatar.*
 
 class SaveAvatarActivity : AppCompatActivity() {
-
-    private var IMAGE_RESPONSE: Int = 2003
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +22,7 @@ class SaveAvatarActivity : AppCompatActivity() {
 
         btnSaveAvatar.setOnClickListener {
             val intent = Intent()
-            setResult(IMAGE_RESPONSE, intent)
+            setResult(Constants.CHOOSE_IMAGE_RESPONSE, intent)
             finish()
         }
 

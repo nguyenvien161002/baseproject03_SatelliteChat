@@ -1,12 +1,12 @@
 package com.example.satellitechat.activity.authentication
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.satellitechat.R
 import com.example.satellitechat.activity.client.MainActivity
+import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,10 +21,9 @@ import com.google.firebase.ktx.Firebase
 class GgAuthActivity : SignInActivity() {
 
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
     private lateinit var auth: FirebaseAuth
     private lateinit var userRef: DatabaseReference
+    private lateinit var preferenceManager: PreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,12 +70,8 @@ class GgAuthActivity : SignInActivity() {
             userRef.child(info.id.toString()).setValue(hashMap)
                 .addOnCompleteListener(this) {
                     if (it.isSuccessful) {
-                        sharedPreferences = getSharedPreferences("is_sign_in", MODE_PRIVATE)
-                        editor = sharedPreferences.edit()
-                        editor.putString("is_sign_in", "true")
-                        editor.putString("method_sign_in", "google")
-                        editor.putString("userId", info.id.toString())
-                        editor.apply()
+                        preferenceManager = PreferenceManager(this@GgAuthActivity)
+                        preferenceManager.setSignIn(info.id.toString())
                         val intent = Intent(this@GgAuthActivity, MainActivity::class.java)
                         startActivity(intent)
                         Toast.makeText(this@GgAuthActivity, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()

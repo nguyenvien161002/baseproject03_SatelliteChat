@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootChatActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -105,7 +106,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/btnVoiceCall"
+            android:id="@+id/btnAudioCall"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:contentDescription="@string/icon"
@@ -185,16 +186,6 @@
             tools:ignore="UselessParent">
 
             <ImageView
-                android:id="@+id/btnTools"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="match_parent"
-                android:padding="10dp"
-                android:src="@drawable/icon_four_squares"
-                android:contentDescription="@string/icon"
-                tools:ignore="NestedWeights" />
-
-            <ImageView
                 android:id="@+id/btnCameraCapture"
                 android:layout_width="0dp"
                 android:layout_weight="2"
@@ -211,6 +202,16 @@
                 android:padding="7dp"
                 android:src="@drawable/icon_picture_purple"
                 android:contentDescription="@string/icon" />
+
+            <ImageView
+                android:id="@+id/btnSendFiles"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:contentDescription="@string/icon"
+                android:padding="10dp"
+                android:src="@drawable/ic_baseline_attach_file"
+                tools:ignore="NestedWeights" />
 
             <ImageView
                 android:id="@+id/btnMicrophone"
@@ -242,29 +243,39 @@
                 android:contentDescription="@string/icon"
                 tools:ignore="NestedWeights" />
 
-
-            <EditText
-                android:id="@+id/inputContent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/boxInputContent"
                 android:layout_width="0dp"
                 android:layout_weight="6"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:layout_height="match_parent"
-                android:autofillHints=""
-                android:background="@drawable/border_input_texting"
-                android:hint="@string/texting"
-                android:inputType="text"
-                android:textSize="16sp"
-                tools:ignore="NestedWeights" />
+                android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/btnIconLike"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="match_parent"
-                android:padding="8dp"
-                android:src="@drawable/icon_facebook_like"
-                android:contentDescription="@string/icon" />
+                <EditText
+                    android:id="@+id/inputContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:autofillHints=""
+                    android:background="@drawable/border_input_texting"
+                    android:hint="@string/texting"
+                    android:inputType="text"
+                    android:textSize="16sp"
+                    tools:ignore="NestedWeights" />
+
+                <ImageView
+                    android:id="@+id/btnEmojiIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="@string/icon"
+                    android:padding="8dp"
+                    android:elevation="10dp"
+                    android:src="@drawable/icon_happy_face"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/inputContent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/btnSendMsg"
@@ -272,7 +283,7 @@
                 android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:padding="4dp"
-                android:visibility="gone"
+                android:gravity="left"
                 android:src="@drawable/ic_baseline_send"
                 tools:ignore="MissingConstraints"
                 android:contentDescription="@string/icon" />
