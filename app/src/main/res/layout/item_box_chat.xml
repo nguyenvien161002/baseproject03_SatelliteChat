@@ -80,7 +80,9 @@
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toStartOf="@+id/lastTime"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintHorizontal_bias="0.085"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:layout_editor_absoluteY="0dp" />
 
                     <TextView
                         android:id="@+id/lastTime"

@@ -79,28 +79,24 @@ class MainActivity : AppCompatActivity() {
                 removeBackgroundTab(arrayTab)
                 when(arrayBtnTab.indexOf(btn)) {
                     0 -> {
-                        title_component.text = getString(R.string.chat_part)
                         sidebarHeader.item1_sidebar.setBackgroundResource(R.drawable.bg_item_sidebar_radius)
                         sidebarHeader.item1_sidebar.setPadding(12)
                         replaceFragment(ChatFragment())
                     }
 
                     1 -> {
-                        title_component.text = getString(R.string.marketplace)
                         sidebarHeader.item2_sidebar.setBackgroundResource(R.drawable.bg_item_sidebar_radius)
                         sidebarHeader.item2_sidebar.setPadding(12)
                         replaceFragment(MarketPlaceFragment())
                     }
 
                     2 -> {
-                        title_component.text = getString(R.string.waiting_message)
                         sidebarHeader.item3_sidebar.setBackgroundResource(R.drawable.bg_item_sidebar_radius)
                         sidebarHeader.item3_sidebar.setPadding(12)
                         replaceFragment(MessageWaitingFragment())
                     }
 
                     3 -> {
-                        title_component.text = getString(R.string.archives)
                         sidebarHeader.item4_sidebar.setBackgroundResource(R.drawable.bg_item_sidebar_radius)
                         sidebarHeader.item4_sidebar.setPadding(12)
                         replaceFragment(ArchivesFragment())
@@ -242,6 +238,7 @@ class MainActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val infoUser = snapshot.getValue(User::class.java)
                 sidebarHeader.userName.text = infoUser!!.userName
+                titleUsername.text = infoUser.userName
                 preferenceManager.setNameAndImage(infoUser.userName, infoUser.userImage)
                 if (infoUser.userImage == "") {
                     sidebarHeader.imageProfile.setImageResource(R.drawable.profile_image)

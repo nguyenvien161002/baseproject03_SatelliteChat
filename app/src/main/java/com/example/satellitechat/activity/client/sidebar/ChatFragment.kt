@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.satellitechat.R
 import com.example.satellitechat.adapter.UserChatAdapter
 import com.example.satellitechat.adapter.UserOnlineAdapter
@@ -39,6 +40,19 @@ class ChatFragment : Fragment() {
         preferenceManager = PreferenceManager(requireContext())
         currentUserId = preferenceManager.getCurrentId().toString()
         view.progressBarChatBox.visibility = ProgressBar.VISIBLE
+
+        usersRef.child(currentUserId).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(User::class.java)!!
+                if (isAdded) {
+                    Glide.with(view).load(user.userImage).placeholder(R.drawable.profile_image).into(view.imageUser)
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(view.context, error.message, Toast.LENGTH_LONG).show()
+            }
+        })
+
 
         // Get user chat box
         view.userRecyclerView.layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)

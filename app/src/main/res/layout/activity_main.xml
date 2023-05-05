@@ -37,16 +37,16 @@
                     android:layout_width="42dp"
                     android:layout_height="38dp"
                     android:contentDescription="@string/menu"
-                    android:padding="4dp"
-                    android:src="@drawable/ic_baseline_menu" />
+                    android:padding="6dp"
+                    android:src="@drawable/icon_menu" />
 
                 <TextView
-                    android:id="@+id/title_component"
+                    android:id="@+id/titleUsername"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:gravity="center"
-                    android:text="@string/chat_part"
+                    android:text="@string/app_author"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -131,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/sidebar_header" >
+        app:headerLayout="@layout/sidebar_header">
 
     </com.google.android.material.navigation.NavigationView>
 
