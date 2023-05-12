@@ -24,15 +24,13 @@ import com.example.satellitechat.activity.client.sidebar.ArchivesFragment
 import com.example.satellitechat.activity.client.sidebar.ChatFragment
 import com.example.satellitechat.activity.client.sidebar.MarketPlaceFragment
 import com.example.satellitechat.activity.client.sidebar.MessageWaitingFragment
-import com.example.satellitechat.activity.client.switchAccounts.SwitchAccountsActivity
+import com.example.satellitechat.activity.client.switch.SwitchAccountsActivity
 import com.example.satellitechat.model.User
 import com.example.satellitechat.utilities.constants.Constants
 import com.example.satellitechat.utilities.preference.PreferenceManager
+import com.example.satellitechat.utilities.time.CurrentTimeAndDate
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sidebar_header.view.*
@@ -50,8 +48,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        usersRef = FirebaseDatabase.getInstance().getReference("Users")
+        usersRef = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF)
         preferenceManager = PreferenceManager(this@MainActivity)
         currentUserId = preferenceManager.getCurrentId().toString()
         checkPermissions(Constants.NOTIFICATION_PERMISSION)
@@ -191,28 +188,16 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         getUserForSidebar(currentUserId)
-        val hashMap = getCurrentCalender()
+        val hashMap = getCurrentTimeAndDate()
         updateUserState("online", hashMap)
         sendFCMTokenToDatabase()
     }
 
     override fun onStop() {
         super.onStop()
-        val hashMap = getCurrentCalender()
+        val hashMap = getCurrentTimeAndDate()
         hashMap["type"] = "offline"
         usersRef.child(currentUserId).child("userState").onDisconnect().setValue(hashMap)
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getCurrentCalender(): HashMap<String, Any> {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-        val timeFormat = SimpleDateFormat("hh:mm:ss a")
-        val currentTime: String = timeFormat.format(System.currentTimeMillis())
-        val currentDate: String = dateFormat.format(System.currentTimeMillis())
-        val hashMap: HashMap<String, Any> = HashMap()
-        hashMap["time"] = currentTime
-        hashMap["date"] = currentDate
-        return hashMap
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -278,6 +263,18 @@ class MainActivity : AppCompatActivity() {
                 // Get token success
                 usersRef.child(currentUserId).child("fcmToken").setValue(task.result)
             })
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentTimeAndDate(): java.util.HashMap<String, Any> {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+        val timeFormat = SimpleDateFormat("hh:mm:ss a")
+        val currentDate: String = dateFormat.format(System.currentTimeMillis())
+        val currentTime: String = timeFormat.format(System.currentTimeMillis())
+        val messageState: java.util.HashMap<String, Any> = java.util.HashMap()
+        messageState["date"] = currentDate
+        messageState["time"] = currentTime
+        return messageState
     }
 
 

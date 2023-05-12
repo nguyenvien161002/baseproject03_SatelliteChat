@@ -16,6 +16,7 @@ import com.example.satellitechat.R
 import com.example.satellitechat.activity.client.chat.ChatActivity
 import com.example.satellitechat.model.Message
 import com.example.satellitechat.model.User
+import com.example.satellitechat.utilities.constants.Constants
 import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.database.*
@@ -77,7 +78,7 @@ class UserChatAdapter (private val context: Context, private val userList: Array
     }
 
     private fun iconUserOnline(userId: String, iconOnline: ImageView) {
-        usersRef = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+        usersRef = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF).child(userId)
         usersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)!!
@@ -100,7 +101,7 @@ class UserChatAdapter (private val context: Context, private val userList: Array
     private fun lastMessage(receiverId: String, lastMessage: TextView, lastTime: TextView) {
         preferenceManager = PreferenceManager(context)
         currentUserId = preferenceManager.getCurrentId().toString()
-        singleChatsRef = FirebaseDatabase.getInstance().getReference("Single Chats")
+        singleChatsRef = FirebaseDatabase.getInstance().getReference(Constants.MESSAGES_REF)
         singleChatsRef.addValueEventListener(object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(snapshot: DataSnapshot) {

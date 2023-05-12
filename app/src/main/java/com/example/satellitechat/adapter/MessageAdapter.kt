@@ -22,6 +22,7 @@ import com.example.satellitechat.R
 import com.example.satellitechat.adapter.diffUtil.MessageDiffCallback
 import com.example.satellitechat.model.Image
 import com.example.satellitechat.model.Message
+import com.example.satellitechat.utilities.constants.Constants
 import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.facebook.FacebookSdk.getApplicationContext
 import com.google.android.material.imageview.ShapeableImageView
@@ -104,7 +105,7 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
             holder.oneImageSendCard.visibility = View.GONE
             holder.msgCallView.visibility = View.GONE
         } else if (message.messageType == "audio_call" || message.messageType == "video_call") { // Render chat item when click button
-            singleChatRef = FirebaseDatabase.getInstance().getReference("Single Chats").child(message.messageId)
+            singleChatRef = FirebaseDatabase.getInstance().getReference(Constants.MESSAGES_REF).child(message.messageId)
             singleChatRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val currentTime = snapshot.child("timeStamp").child("time").value
@@ -161,7 +162,7 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
 
         // Get url image profile of sender
         if (message.senderId == currentUserId) {
-            usersRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUserId)
+            usersRef = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF).child(currentUserId)
             usersRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userImage = snapshot.child("userImage").value
@@ -179,7 +180,7 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
             })
         }
         else { // Get url image profile of receiver
-            usersRef = FirebaseDatabase.getInstance().getReference("Users").child(receiverId)
+            usersRef = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF).child(receiverId)
             usersRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userImage = snapshot.child("userImage").value

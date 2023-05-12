@@ -59,6 +59,11 @@ class PreferenceManager (context: Context) {
         editor.apply()
     }
 
+    fun setString(key: String, string: String) {
+        editor.putString(key, string)
+        editor.apply()
+    }
+
     fun getString(key: String): String? {
         return sharedPreferences.getString(key, "")
     }

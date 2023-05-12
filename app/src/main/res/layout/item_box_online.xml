@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
+            <!-- container contain content status -->
             <RelativeLayout
                 android:id="@+id/contentStatusContainer"
                 android:layout_width="wrap_content"
@@ -55,9 +56,9 @@
 
                 </RelativeLayout>
 
-
             </RelativeLayout>
 
+            <!-- icon bubble child -->
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/bubbleIconFirstChild"
                 android:layout_width="16dp"
@@ -77,6 +78,7 @@
                 app:strokeWidth="1dp"
                 tools:ignore="MissingConstraints" />
 
+            <!-- icon bubble child 2 -->
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/bubbleIconSecondChild"
                 android:layout_width="10dp"

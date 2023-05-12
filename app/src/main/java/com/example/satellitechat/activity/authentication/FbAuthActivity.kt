@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.example.satellitechat.activity.client.MainActivity
+import com.example.satellitechat.utilities.constants.Constants
 import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.facebook.*
 import com.facebook.login.LoginManager
@@ -28,7 +29,7 @@ class FbAuthActivity : SignInActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
-        userRef = FirebaseDatabase.getInstance().getReference("Users")
+        userRef = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF)
         callbackManager = CallbackManager.Factory.create()
         LoginManager.getInstance().logInWithReadPermissions(this@FbAuthActivity, listOf("email", "public_profile"))
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {

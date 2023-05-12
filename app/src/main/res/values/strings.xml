@@ -84,4 +84,15 @@
     <string name="emoji_icon_text">😁😁</string>
     <string name="label_messages">Messages</string>
     <string name="label_requests">Requests</string>
+    <string name="post_status_label">Chia sẻ</string>
+    <string name="share_thinking_hint">Bạn chia sẻ suy nghĩ đi...</string>
+    <string name="post_permissions_label_friend_follow">Chia sẻ với <b>Người theo dõi mà bạn theo dõi lại</b></string>
+    <string name="label_friend_follow">Người theo dõi mà bạn theo dõi lại</string>
+    <string name="label_share_public">Chia sẽ công khai</string>
+    <string name="post_permissions_label_public">Chia sẻ với <b>Trạng thái công khai</b></string>
+    <string name="max_length_post_status_label">60/60</string>
+    <string name="done_label">Xong</string>
+    <string name="share_with_label">Chia sẽ với</string>
+    <string name="cancel_label">Hủy</string>
+
 </resources>

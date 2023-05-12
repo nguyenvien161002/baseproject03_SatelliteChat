@@ -14,6 +14,7 @@
     <color name="black_50">#EEEEEE</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#FE2C55</color>
+    <color name="lavender">#8692f7</color>
     <color name="border_input">#BCC0C4</color>
     <color name="blue">#2196F3</color>
     <color name="active_status">#25DF51</color>

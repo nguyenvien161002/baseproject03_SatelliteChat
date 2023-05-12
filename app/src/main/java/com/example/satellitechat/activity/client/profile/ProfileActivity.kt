@@ -12,7 +12,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.satellitechat.R
 import com.example.satellitechat.activity.client.MainActivity
-import com.example.satellitechat.activity.client.saveAvatar.SaveAvatarActivity
+import com.example.satellitechat.activity.client.save.SaveAvatarActivity
 import com.example.satellitechat.model.User
 import com.example.satellitechat.utilities.constants.Constants
 import com.example.satellitechat.utilities.preference.PreferenceManager
@@ -50,7 +50,7 @@ class ProfileActivity : AppCompatActivity() {
         preferenceManager = PreferenceManager(this@ProfileActivity)
         currentUserId = preferenceManager.getCurrentId().toString()
         storage = FirebaseStorage.getInstance()
-        usersRef = FirebaseDatabase.getInstance().getReference("Users")
+        usersRef = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF)
 
         // Setup dialog "loading process"
         dialog = Dialog(this@ProfileActivity)

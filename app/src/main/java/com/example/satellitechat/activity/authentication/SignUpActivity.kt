@@ -9,6 +9,7 @@ import android.util.Patterns
 import android.widget.EditText
 import android.widget.Toast
 import com.example.satellitechat.R
+import com.example.satellitechat.utilities.constants.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -96,7 +97,8 @@ class SignUpActivity : AppCompatActivity() {
                                 hashMap["userImage"] = ""
                                 hashMap["password"] = password
                                 hashMap["methodSignIn"] = "account"
-                                databaseRef = FirebaseDatabase.getInstance().reference.child("Users").child(userId)
+                                databaseRef = FirebaseDatabase.getInstance().reference.child(
+                                    Constants.USERS_REF).child(userId)
                                 databaseRef.setValue(hashMap).addOnCompleteListener(this) {
                                     if (it.isSuccessful) {
                                         dialog.dismiss()

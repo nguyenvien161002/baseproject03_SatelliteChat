@@ -39,6 +39,7 @@ import com.example.satellitechat.model.User
 import com.example.satellitechat.utilities.constants.Constants
 import com.example.satellitechat.utilities.emoji.EmojiApp
 import com.example.satellitechat.utilities.preference.PreferenceManager
+import com.example.satellitechat.utilities.time.CurrentTimeAndDate
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -76,8 +77,8 @@ class ChatActivity : AppCompatActivity(), UsersListener {
         preferenceManager = PreferenceManager(this@ChatActivity)
         currentUserId = preferenceManager.getCurrentId().toString()
         storage = FirebaseStorage.getInstance()
-        usersRef = FirebaseDatabase.getInstance().getReference("Users")
-        singleChatsRef = FirebaseDatabase.getInstance().getReference("Single Chats")
+        usersRef = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF)
+        singleChatsRef = FirebaseDatabase.getInstance().getReference(Constants.MESSAGES_REF)
 
         iconBackChatActivity.setOnClickListener {
             onBackPressed()
@@ -459,19 +460,6 @@ class ChatActivity : AppCompatActivity(), UsersListener {
         pushMsg.setValue(hashMap)
     }
 
-    // Get current time/date: Lấy thời gian hiện tại
-    @SuppressLint("SimpleDateFormat")
-    private fun getCurrentTimeAndDate(): HashMap<String, Any> {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-        val timeFormat = SimpleDateFormat("hh:mm:ss a")
-        val currentDate: String = dateFormat.format(System.currentTimeMillis())
-        val currentTime: String = timeFormat.format(System.currentTimeMillis())
-        val messageState: HashMap<String, Any> = HashMap()
-        messageState["date"] = currentDate
-        messageState["time"] = currentTime
-        return messageState
-    }
-
     // Render sent messages: Hiển thị tin nhắn đã gửi ra giao diện người dùng
     private fun renderMessage(senderId: String, receiverId: String) {
         singleChatsRef.addValueEventListener(object : ValueEventListener {
@@ -604,6 +592,18 @@ class ChatActivity : AppCompatActivity(), UsersListener {
             btnShowTools.visibility = View.GONE
             boxInputContent.layoutParams = paramInputContent
         }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentTimeAndDate(): HashMap<String, Any> {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+        val timeFormat = SimpleDateFormat("hh:mm:ss a")
+        val currentDate: String = dateFormat.format(System.currentTimeMillis())
+        val currentTime: String = timeFormat.format(System.currentTimeMillis())
+        val messageState: HashMap<String, Any> = HashMap()
+        messageState["date"] = currentDate
+        messageState["time"] = currentTime
+        return messageState
     }
 
     // Get user from firebase
