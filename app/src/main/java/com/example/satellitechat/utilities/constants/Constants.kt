@@ -33,6 +33,8 @@ object Constants {
     const val NOTIFICATION_PERMISSION_REQUEST: Int = 5001
     const val RECORD_AUDIO_PERMISSION: String = "record_audio_permission"
     const val RECORD_AUDIO_PERMISSION_REQUEST: Int = 6001
+    const val CAMERA_RECORD_AUDIO_PERMISSION: String = "camera_record_audio_permission"
+    const val CAMERA_RECORD_AUDIO_PERMISSION_REQUEST: Int = 7001
     const val PREFERENCE_NAME: String = "satellite_chat_preference"
     const val IS_SIGN_IN: String = "is_sign_in"
     const val METHOD_SIGN_IN: String = "method_sign_in"
@@ -49,8 +51,10 @@ object Constants {
     const val REMOTE_MSG_INVITER_TOKEN: String = "inviterToken"
     const val REMOTE_MSG_DATA: String = "data"
     const val REMOTE_MSG_REGISTRATION_IDS: String = "registration_ids"
-    const val NOTIFICATION_ID: Int = 1000
-    const val PENDING_INTENT_REQUEST: Int = 4006
+    const val NOTIFICATION_ID_CALL: Int = 1000
+    const val NOTIFICATION_ID_MISSED_CALL: Int = 1001
+    const val PENDING_INTENT_REQUEST: String = "pending_intent_request"
+    const val PENDING_INTENT_REQUEST_CODE: Int = 2002
     const val ACTION_ANSWER: String = "com.example.satellitechat.ACTION_ANSWER"
     const val ACTION_DECLINE: String = "com.example.satellitechat.ACTION_DECLINE"
     const val REMOTE_MSG_INVITATION_RESPONSE: String = "invitationResponse"

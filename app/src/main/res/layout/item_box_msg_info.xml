@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemBoxMsgInfo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingTop="20dp"
+    android:paddingBottom="30dp"
+    android:orientation="vertical">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageUserProfile"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:padding="2dp"
+        android:src="@drawable/avatar"
+        app:shapeAppearanceOverlay="@style/Circular"
+        app:strokeColor="@null" />
+
+    <TextView
+        android:id="@+id/userNameProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/app_author"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/nameApplicationSatelliteChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/relationShipWithUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/your_re_friends_on_satellitechat"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/black_400"
+        android:textSize="16sp"/>
+
+</LinearLayout>

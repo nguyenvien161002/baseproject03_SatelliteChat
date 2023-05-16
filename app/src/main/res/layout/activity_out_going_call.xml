@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/bg_out_going_call_gradient"
     tools:context=".activity.client.chat.OutGoingCallActivity">
 
     <RelativeLayout
@@ -26,7 +27,6 @@
             android:id="@+id/remoteVideoView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_out_going_call_gradient"
             android:elevation="0dp" />
 
     </RelativeLayout>

@@ -13,12 +13,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -37,9 +34,9 @@ import com.example.satellitechat.model.Image
 import com.example.satellitechat.model.Message
 import com.example.satellitechat.model.User
 import com.example.satellitechat.utilities.constants.Constants
-import com.example.satellitechat.utilities.emoji.EmojiApp
 import com.example.satellitechat.utilities.preference.PreferenceManager
-import com.example.satellitechat.utilities.time.CurrentTimeAndDate
+import com.example.satellitechat.utilities.send.SendMessage
+import com.example.satellitechat.utilities.time.TimeAndDateGeneral
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -57,28 +54,32 @@ class ChatActivity : AppCompatActivity(), UsersListener {
     private var uriISRecycler = ArrayList<Image>()
     private var uriImageSelected = ArrayList<Uri>()
     private var receiverId: String = ""
-    private var messageId: String = ""
-    private var messageState: HashMap<String, Any> = getCurrentTimeAndDate()
+    private var messageState: HashMap<String, Any> = TimeAndDateGeneral().getCurrentTimeAndDate()
     private lateinit var dialog: Dialog
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var usersRef: DatabaseReference
-    private lateinit var singleChatsRef: DatabaseReference
+    private lateinit var messagesRef: DatabaseReference
     private lateinit var storage: FirebaseStorage
     private lateinit var storageReference: StorageReference
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var imageAdapter: ImageAdapter
+    private lateinit var send: SendMessage
 
     @SuppressLint("SimpleDateFormat", "UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
+        // Chua làm cái add friend và khi bạn đăng status thì friend chưa thấy
+
+
         // Initialize firebase auth, firebase storage, firebase db ...
         preferenceManager = PreferenceManager(this@ChatActivity)
+        send = SendMessage()
         currentUserId = preferenceManager.getCurrentId().toString()
         storage = FirebaseStorage.getInstance()
         usersRef = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF)
-        singleChatsRef = FirebaseDatabase.getInstance().getReference(Constants.MESSAGES_REF)
+        messagesRef = FirebaseDatabase.getInstance().getReference(Constants.MESSAGES_REF)
 
         iconBackChatActivity.setOnClickListener {
             onBackPressed()
@@ -103,14 +104,13 @@ class ChatActivity : AppCompatActivity(), UsersListener {
         btnShowTools.setOnClickListener {
             inputContent.clearFocus()
         }
-        // Coi lại đoạn gửi qua incoming activity mesageId
 
         // Set onclick button send message
         btnSendMsg.setOnClickListener {
             val drawable = btnSendMsg.drawable
             val otherDrawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.icon_facebook_like)
             if (drawable?.constantState?.equals(otherDrawable?.constantState) == true) {
-                sendMessageSingleChat(
+                send.sendMessage(
                     currentUserId, receiverId, "Đã gửi 1 biểu tượng cảm xúc",
                     "icon_like", messageState, "", HashMap()
                 )
@@ -134,8 +134,9 @@ class ChatActivity : AppCompatActivity(), UsersListener {
         }
 
         // Set on click choose file send
-        btnSendFiles.setOnClickListener {
-            if(Environment.isExternalStorageManager()) {
+        btnChooseFiles.setOnClickListener {
+            val state = Environment.getExternalStorageState()
+            if(state == Environment.MEDIA_MOUNTED || state == Environment.MEDIA_MOUNTED_READ_ONLY) {
                 chooseFiles()
             } else {
                 checkPermissions(Constants.FILE_PERMISSION)
@@ -144,28 +145,12 @@ class ChatActivity : AppCompatActivity(), UsersListener {
 
         // Set on click audio call
         btnAudioCall.setOnClickListener {
-            getReceiver(receiverId) { receiver ->
-                initiateAudioMeeting(receiver!!)
-            }
-            Handler(Looper.getMainLooper()).postDelayed({
-                sendMessageSingleChat(
-                    currentUserId, receiverId, "Video Call", "video_call",
-                    messageState, "", HashMap()
-                )
-            }, 2000)
+            checkPermissions(Constants.RECORD_AUDIO_PERMISSION)
         }
 
         // Set on click video call
         btnVideoCall.setOnClickListener {
-            getReceiver(receiverId) { receiver ->
-                initiateVideoMeeting(receiver!!)
-            }
-            Handler(Looper.getMainLooper()).postDelayed({
-                sendMessageSingleChat(
-                    currentUserId, receiverId, "Video Call", "video_call",
-                    messageState, "", HashMap()
-                )
-            }, 2000)
+            checkPermissions(Constants.CAMERA_RECORD_AUDIO_PERMISSION)
         }
 
         val emojiPopup = EmojiPopup.Builder.fromRootView(rootChatActivity).build(inputContent)
@@ -204,7 +189,8 @@ class ChatActivity : AppCompatActivity(), UsersListener {
             }
             Constants.FILE_PERMISSION_REQUEST -> {
                 // Agree to allow the use
-                if (Environment.isExternalStorageManager()) {
+                val state = Environment.getExternalStorageState()
+                if (state == Environment.MEDIA_MOUNTED || state == Environment.MEDIA_MOUNTED_READ_ONLY) {
                     chooseFiles()
                 } else if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
                     chooseFiles()
@@ -212,6 +198,21 @@ class ChatActivity : AppCompatActivity(), UsersListener {
                     Toast.makeText(this@ChatActivity, "Bạn đã từ chối quyền truy cập file", Toast.LENGTH_LONG).show()
                 }
                 return
+            }
+            Constants.RECORD_AUDIO_PERMISSION_REQUEST -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    handleAudioCall()
+                } else { // Do not agree to allow the use
+                    Toast.makeText(this@ChatActivity, "Bạn đã từ chối quyền truy cập record audio", Toast.LENGTH_LONG).show()
+                }
+            }
+            Constants.CAMERA_RECORD_AUDIO_PERMISSION_REQUEST -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) ||
+                    (grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+                    handleVideoCall()
+                } else { // Do not agree to allow the use
+                    Toast.makeText(this@ChatActivity, "Bạn đã từ chối quyền truy cập audio và camera", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -242,7 +243,7 @@ class ChatActivity : AppCompatActivity(), UsersListener {
                 listSelectedPhotoRecyclerView.visibility = View.GONE
                 imageSelectedCard.visibility = View.VISIBLE
                 val bitmap: Bitmap? =
-                    MediaStore.Images.Media.getBitmap(contentResolver, data!!.data)
+                    MediaStore.Images.Media.getBitmap(contentResolver, data.data)
                 imageSelectedChat.setImageBitmap(bitmap)
             } else if (uriISRecycler.size == 2) {
                 listSelectedPhotoRecyclerView.visibility = View.VISIBLE
@@ -275,8 +276,8 @@ class ChatActivity : AppCompatActivity(), UsersListener {
                                     .addOnSuccessListener { taskDownload ->
                                         val fileMedia: HashMap<String, String> = HashMap()
                                         fileMedia["1"] = taskDownload.toString()
-                                        val messageState: HashMap<String, Any> = getCurrentTimeAndDate()
-                                        sendMessageSingleChat(
+                                        val messageState: HashMap<String, Any> = TimeAndDateGeneral().getCurrentTimeAndDate()
+                                        send.sendMessage(
                                             currentUserId, receiverId, fileName, "file",
                                            messageState, "*/*", fileMedia
                                         )
@@ -303,6 +304,18 @@ class ChatActivity : AppCompatActivity(), UsersListener {
 
     }
 
+    private fun handleAudioCall() {
+        getReceiver(receiverId) { receiver ->
+            initiateAudioMeeting(receiver!!)
+        }
+    }
+
+    private fun handleVideoCall() {
+        getReceiver(receiverId) { receiver ->
+            initiateVideoMeeting(receiver!!)
+        }
+    }
+
     private fun containsEmoji(text: String): Boolean {
         val regex = Regex("[\\p{So}]+")
         return regex.matches(text)
@@ -325,8 +338,8 @@ class ChatActivity : AppCompatActivity(), UsersListener {
                                 containerSelectedPhoto.visibility = View.GONE
                                 setVisibilityBtnSend(0)
                                 val message = "Gửi $count ảnh"
-                                val messageState: HashMap<String, Any> = getCurrentTimeAndDate()
-                                sendMessageSingleChat(
+                                val messageState: HashMap<String, Any> = TimeAndDateGeneral().getCurrentTimeAndDate()
+                                send.sendMessage(
                                     currentUserId, receiverId, message, "file",
                                     messageState, "image", mediaFile
                                 )
@@ -387,6 +400,31 @@ class ChatActivity : AppCompatActivity(), UsersListener {
                 chooseFiles()
             }
 
+        } else if (permission == Constants.RECORD_AUDIO_PERMISSION) {
+            if (ContextCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    this@ChatActivity,
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    Constants.RECORD_AUDIO_PERMISSION_REQUEST
+                )
+            } else {
+                handleAudioCall()
+            }
+        } else if (permission == Constants.CAMERA_RECORD_AUDIO_PERMISSION) {
+            if ((ContextCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) ||
+                (ContextCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)) {
+                val arrayPermission: Array<String> = arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO
+                )
+                ActivityCompat.requestPermissions(
+                    this@ChatActivity,
+                    arrayPermission,
+                    Constants.CAMERA_RECORD_AUDIO_PERMISSION_REQUEST
+                )
+            } else {
+                handleVideoCall()
+            }
         }
     }
 
@@ -416,8 +454,8 @@ class ChatActivity : AppCompatActivity(), UsersListener {
             Toast.makeText(this@ChatActivity, "Vui lòng nhập tin nhắn!", Toast.LENGTH_LONG).show()
         } else if (message != "" && containerSelectedPhoto.visibility == View.GONE) {
             // Set time for save data: Thiết lập thời gian trước khi gửi tin nhắn
-            val messageState: HashMap<String, Any> = getCurrentTimeAndDate()
-            val isSend = sendMessageSingleChat(
+            val messageState: HashMap<String, Any> = TimeAndDateGeneral().getCurrentTimeAndDate()
+            val isSend = send.sendMessage(
                 currentUserId, receiverId, message, messageType,
                 messageState, "", HashMap()
             )
@@ -434,35 +472,9 @@ class ChatActivity : AppCompatActivity(), UsersListener {
         }
     }
 
-    // Send message: Gửi tin nhắn (lưu vào DB)
-    private fun sendMessageSingleChat(
-        senderId: String,
-        receiverId: String,
-        message: String,
-        messageType: String,
-        messageState: HashMap<String, Any>,
-        mediaFileType: String,
-        mediaFile: HashMap<String, String> )
-    {
-        // Save data normal
-        val hashMap: HashMap<String, Any> = HashMap()
-        hashMap["senderId"] = senderId
-        hashMap["receiverId"] = receiverId
-        hashMap["message"] = message
-        hashMap["messageType"] = messageType
-        hashMap["messageRes"] = ""
-        hashMap["timeStamp"] = messageState
-        hashMap["mediaFileType"] = mediaFileType
-        hashMap["mediaFile"] = mediaFile
-        val pushMsg = singleChatsRef.push()
-        hashMap["messageId"] = pushMsg.key.toString()
-        messageId = pushMsg.key.toString()
-        pushMsg.setValue(hashMap)
-    }
-
     // Render sent messages: Hiển thị tin nhắn đã gửi ra giao diện người dùng
     private fun renderMessage(senderId: String, receiverId: String) {
-        singleChatsRef.addValueEventListener(object : ValueEventListener {
+        messagesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 messageList.clear()
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
@@ -594,18 +606,6 @@ class ChatActivity : AppCompatActivity(), UsersListener {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private fun getCurrentTimeAndDate(): HashMap<String, Any> {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-        val timeFormat = SimpleDateFormat("hh:mm:ss a")
-        val currentDate: String = dateFormat.format(System.currentTimeMillis())
-        val currentTime: String = timeFormat.format(System.currentTimeMillis())
-        val messageState: HashMap<String, Any> = HashMap()
-        messageState["date"] = currentDate
-        messageState["time"] = currentTime
-        return messageState
-    }
-
     // Get user from firebase
     private fun getReceiver(receiverId: String, onResult: (User?) -> Unit) {
         usersRef.child(receiverId).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -625,8 +625,7 @@ class ChatActivity : AppCompatActivity(), UsersListener {
         } else {
             val intent = Intent(this@ChatActivity, OutGoingCallActivity::class.java)
             intent.putExtra("receiver", user)
-            intent.putExtra("type", Constants.AUDIO_CALL)
-            intent.putExtra("messageId", messageId)
+            intent.putExtra(Constants.REMOTE_MSG_MEETING_TYPE, Constants.AUDIO_CALL)
             startActivity(intent)
             finish()
         }
@@ -638,8 +637,7 @@ class ChatActivity : AppCompatActivity(), UsersListener {
         } else {
             val intent = Intent(this@ChatActivity, OutGoingCallActivity::class.java)
             intent.putExtra("receiver", user)
-            intent.putExtra("type", Constants.VIDEO_CALL)
-            intent.putExtra("messageId", messageId)
+            intent.putExtra(Constants.REMOTE_MSG_MEETING_TYPE, Constants.VIDEO_CALL)
             startActivity(intent)
             finish()
         }

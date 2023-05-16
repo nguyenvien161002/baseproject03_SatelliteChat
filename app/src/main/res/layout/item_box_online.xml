@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
     android:background="@color/white">
 
     <LinearLayout
@@ -17,86 +18,91 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <!-- container contain content status -->
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/contentStatusContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="52dp"
                 android:elevation="2dp"
-                android:gravity="center"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints">
 
+                <!-- container contain content status -->
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="52dp"
                     android:gravity="center"
-                    android:padding="2dp">
+                    android:elevation="@dimen/_2sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingConstraints">
 
-                    <TextView
-                        android:id="@+id/contentStatus"
-                        android:layout_width="match_parent"
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_thinking_bubble"
-                        android:elevation="@dimen/_2sdp"
-                        android:ellipsize="end"
                         android:gravity="center"
-                        android:maxLines="3"
-                        android:minWidth="50dp"
-                        android:minHeight="40dp"
-                        android:padding="4dp"
-                        android:text="..."
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:padding="2dp">
+
+                        <TextView
+                            android:id="@+id/contentStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_thinking_bubble"
+                            android:elevation="@dimen/_2sdp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="3"
+                            android:minWidth="50dp"
+                            android:minHeight="40dp"
+                            android:padding="10dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="12sp" />
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
 
-            </RelativeLayout>
+                <!-- icon bubble child -->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/bubbleIconFirstChild"
+                    android:layout_width="16dp"
+                    android:layout_height="15dp"
+                    android:layout_marginEnd="42dp"
+                    android:layout_marginBottom="48dp"
+                    android:background="@color/white"
+                    android:contentDescription="@string/username"
+                    android:elevation="@dimen/_1sdp"
+                    android:padding="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:shapeAppearanceOverlay="@style/Circular"
+                    app:strokeColor="@color/border_input"
+                    app:strokeWidth="1dp"
+                    tools:ignore="MissingConstraints" />
 
-            <!-- icon bubble child -->
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/bubbleIconFirstChild"
-                android:layout_width="16dp"
-                android:layout_height="15dp"
-                android:layout_marginEnd="42dp"
-                android:layout_marginBottom="48dp"
-                android:background="@color/white"
-                android:contentDescription="@string/username"
-                android:elevation="@dimen/_1sdp"
-                android:padding="2dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:shapeAppearanceOverlay="@style/Circular"
-                app:strokeColor="@color/border_input"
-                app:strokeWidth="1dp"
-                tools:ignore="MissingConstraints" />
+                <!-- icon bubble child 2 -->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/bubbleIconSecondChild"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginEnd="34dp"
+                    android:layout_marginBottom="42dp"
+                    android:background="@color/white"
+                    android:contentDescription="@string/username"
+                    android:elevation="@dimen/_1sdp"
+                    android:padding="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:shapeAppearanceOverlay="@style/Circular"
+                    app:strokeColor="@color/border_input"
+                    app:strokeWidth="1dp"
+                    tools:ignore="MissingConstraints" />
 
-            <!-- icon bubble child 2 -->
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/bubbleIconSecondChild"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_marginEnd="34dp"
-                android:layout_marginBottom="42dp"
-                android:background="@color/white"
-                android:contentDescription="@string/username"
-                android:elevation="@dimen/_1sdp"
-                android:padding="2dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:shapeAppearanceOverlay="@style/Circular"
-                app:strokeColor="@color/border_input"
-                app:strokeWidth="1dp"
-                tools:ignore="MissingConstraints" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageUserOnline"

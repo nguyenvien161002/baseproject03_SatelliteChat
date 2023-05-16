@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/bg_incoming_call_gradient"
     tools:context=".activity.client.chat.OutGoingCallActivity">
 
     <RelativeLayout
@@ -26,7 +27,6 @@
             android:id="@+id/remoteVideoView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_incoming_call_gradient"
             android:elevation="0dp" />
 
     </RelativeLayout>
@@ -66,7 +66,7 @@
             app:layout_constraintTop_toBottomOf="@+id/imageCaller" />
 
         <TextView
-            android:id="@+id/labelAudioCall"
+            android:id="@+id/labelAudioCallOrTimeCall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -78,12 +78,13 @@
             tools:layout_editor_absoluteX="20dp" />
 
         <LinearLayout
+            android:id="@+id/containerTitleResponseCall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="100dp"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/labelAudioCall">
+            app:layout_constraintTop_toBottomOf="@+id/labelAudioCallOrTimeCall">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -104,6 +105,7 @@
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerBtnAnswerDecline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="70dp"

@@ -6,7 +6,7 @@ data class Message (
     var receiverId: String = "",
     var message: String = "",
     var messageType: String = "",
-    var messageRes: String = "",
+    var messageRes: Any = "",
     var messageState: Any = "",
     var mediaFileType: String = "",
     var mediaFile: ArrayList<String> = ArrayList(),

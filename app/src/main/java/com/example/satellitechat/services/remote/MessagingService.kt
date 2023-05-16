@@ -1,24 +1,29 @@
 package com.example.satellitechat.services.remote
 
 import android.annotation.SuppressLint
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
+import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.example.satellitechat.R
 import com.example.satellitechat.utilities.constants.Constants
 import com.example.satellitechat.utilities.notification.AnswerReceiver
+import com.example.satellitechat.utilities.notification.CallNotification
 import com.example.satellitechat.utilities.notification.DeclineReceiver
+import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
 import java.util.*
 
 class MessagingService : FirebaseMessagingService() {
+
+    private lateinit var callNotification: CallNotification
+    private lateinit var preferenceManager: PreferenceManager
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
@@ -29,6 +34,10 @@ class MessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
+        callNotification = CallNotification.getInstance(baseContext)
+        callNotification.onCreate()
+
+        preferenceManager = PreferenceManager(baseContext)
         val type: String? = remoteMessage.data[Constants.REMOTE_MSG_TYPE]
 
         if (type != null) {
@@ -42,16 +51,7 @@ class MessagingService : FirebaseMessagingService() {
                 val meetingType = remoteMessage.data[Constants.REMOTE_MSG_MEETING_TYPE]
                 val meetingRoom = remoteMessage.data[Constants.REMOTE_MSG_MEETING_ROOM]
                 val inviterToken = remoteMessage.data[Constants.REMOTE_MSG_INVITER_TOKEN]
-                val notificationManager = getSystemService(android.content.Context.NOTIFICATION_SERVICE) as NotificationManager
                 val pendingIntentRequest = generateRandomNumber()
-                val channel = NotificationChannel(
-                    Constants.CHANNEL_ID,
-                    Constants.CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_HIGH
-                )
-                channel.description = Constants.CHANNEL_DESCRIPTION
-                channel.setShowBadge(true)
-                notificationManager.createNotificationChannel(channel)
 
                 /* -----NOTE-----
                 Có thể do hệ thống Android lưu trữ trạng thái PendingIntent trong một khoảng thời gian.
@@ -72,6 +72,7 @@ class MessagingService : FirebaseMessagingService() {
                     putExtra(Constants.REMOTE_MSG_MEETING_TYPE, meetingType)
                     putExtra(Constants.REMOTE_MSG_MEETING_ROOM, meetingRoom)
                     putExtra(Constants.REMOTE_MSG_INVITER_TOKEN, inviterToken)
+                    putExtra(Constants.PENDING_INTENT_REQUEST, pendingIntentRequest)
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     action = Constants.ACTION_ANSWER
                 }
@@ -87,28 +88,24 @@ class MessagingService : FirebaseMessagingService() {
                     putExtra(Constants.REMOTE_MSG_MEETING_TYPE, meetingType)
                     putExtra(Constants.REMOTE_MSG_MEETING_ROOM, meetingRoom)
                     putExtra(Constants.REMOTE_MSG_INVITER_TOKEN, inviterToken)
+                    putExtra(Constants.PENDING_INTENT_REQUEST, pendingIntentRequest)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     action = Constants.ACTION_DECLINE
                 }
+
                 val pendingIntentDecline = PendingIntent.getBroadcast(this, pendingIntentRequest, declineIntent, PendingIntent.FLAG_IMMUTABLE)
+                callNotification.showCallNotification(messageId!!, senderName!!, meetingType!!, pendingIntentAnswer, pendingIntentDecline)
 
-                // Init notification
-                val notification = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
-                    .setSmallIcon(R.drawable.icon_call)
-                    .setContentTitle(senderName)
-                    .setContentText(getString(R.string.call_notification))
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setContentIntent(pendingIntentAnswer)
-                    .setAutoCancel(true)
-                    .addAction(R.drawable.icon_call, "Answer", pendingIntentAnswer)
-                    .addAction(R.drawable.icons_phone_white, "Decline", pendingIntentDecline)
-                    .build()
-
-                notificationManager.notify(Constants.NOTIFICATION_ID, notification)
             } else if (type == Constants.REMOTE_MSG_INVITATION_RESPONSE) {
+                Log.d("MESSAGING", "REMOTE_MSG_INVITATION_RESPONSE")
                 val intent = Intent(Constants.REMOTE_MSG_INVITATION_RESPONSE).apply {
                     putExtra(
                         Constants.REMOTE_MSG_INVITATION_RESPONSE,
                         remoteMessage.data[Constants.REMOTE_MSG_INVITATION_RESPONSE]
+                    )
+                    putExtra(
+                        Constants.REMOTE_MSG_MEETING_TYPE,
+                        remoteMessage.data[Constants.REMOTE_MSG_MEETING_TYPE]
                     )
                 }
                 LocalBroadcastManager.getInstance(this@MessagingService).sendBroadcast(intent)

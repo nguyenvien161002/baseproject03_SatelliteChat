@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import com.example.satellitechat.R
 import com.example.satellitechat.adapter.diffUtil.MessageDiffCallback
 import com.example.satellitechat.model.Image
 import com.example.satellitechat.model.Message
+import com.example.satellitechat.model.User
 import com.example.satellitechat.utilities.constants.Constants
 import com.example.satellitechat.utilities.preference.PreferenceManager
 import com.facebook.FacebookSdk.getApplicationContext
@@ -30,17 +32,19 @@ import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class MessageAdapter (private var context: Context, private var messageList: ArrayList<Message>)
     : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     private var currentUserId = ""
     private var receiverId = ""
+    private var itemBoxInfoUser = 2
     private var itemBoxSender = 1
     private var itemBoxReceiver = 0
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var usersRef: DatabaseReference
-    private lateinit var singleChatRef: DatabaseReference
+    private lateinit var messagesRef: DatabaseReference
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // Reference layout
@@ -51,7 +55,6 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
             val view = LayoutInflater.from(parent.context).inflate(R.layout.item_box_msg_receiver, parent, false)
             ViewHolder(view)
         }
-
     }
 
     @SuppressLint("NotifyDataSetChanged", "ResourceAsColor")
@@ -59,7 +62,7 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
         val message = messageList[position]
 
         // Render image sent by sender/receiver
-        if (message.mediaFile.size != 0 && message.mediaFileType != "*/*") {
+        if (message.mediaFile.size != 0 && message.mediaFileType == "image" && message.messageType == "file") {
             val imageList: ArrayList<Image> = ArrayList()
             for (i in 1 until message.mediaFile.size) {
                 imageList.add(Image(Uri.EMPTY, message.mediaFile[i]))
@@ -80,7 +83,7 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
             holder.textMsgUser.visibility = View.GONE
             holder.textMsgEmojiIcon.visibility = View.GONE
             holder.msgCallView.visibility = View.GONE
-        } else if (message.mediaFile.size != 0 && message.mediaFileType == "*/*") { // Render file sent by sender/receiver
+        } else if (message.mediaFile.size != 0 && message.mediaFileType == "*/*" && message.messageType == "file") { // Render file sent by sender/receiver
             holder.textMsgUser.visibility = View.VISIBLE
             holder.textMsgUser.text = message.message
             holder.textMsgUser.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_file_download, 0);
@@ -104,16 +107,34 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
             holder.imageListRecyclerView.visibility = View.GONE
             holder.oneImageSendCard.visibility = View.GONE
             holder.msgCallView.visibility = View.GONE
-        } else if (message.messageType == "audio_call" || message.messageType == "video_call") { // Render chat item when click button
-            singleChatRef = FirebaseDatabase.getInstance().getReference(Constants.MESSAGES_REF).child(message.messageId)
-            singleChatRef.addValueEventListener(object : ValueEventListener {
+        } else if ((message.messageType == "audio_call" || message.messageType == "video_call") && message.mediaFileType != "file") { // Render chat item when click button
+            messagesRef = FirebaseDatabase.getInstance().getReference(Constants.MESSAGES_REF).child(message.messageId)
+            messagesRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val currentTime = snapshot.child("timeStamp").child("time").value
                     val format = SimpleDateFormat("hh:mm:ss a", Locale.US)
-                    val date = format.parse(currentTime as String)
-                    val timeFormat = SimpleDateFormat("hh:mm a", Locale.US)
-                    val timeCall = date?.let { timeFormat.format(it) }
-                    holder.timeMsgCall.text = timeCall
+                    val messageRes = snapshot.child("messageRes").value
+                    if ((messageRes is HashMap<*, *>)) {
+                        val formatTiCaDur = formatTimeCallDuration(messageRes["messageCaDur"].toString())
+                        holder.timeMsgCall.text = formatTiCaDur
+                        if (message.messageType == "audio_call") {
+                            holder.iconStateCall.setImageResource(R.drawable.icons_outgoing_call_60)
+                        } else {
+                            holder.iconStateCall.setImageResource(R.drawable.icon_video_call)
+                        }
+                    } else {
+                        if(messageRes == "receiver_rejected" || messageRes == "missed_call") {
+                            if (message.messageType == "audio_call") {
+                                holder.iconStateCall.setImageResource(R.drawable.icons_call_disconnected_48)
+                            } else {
+                                holder.iconStateCall.setImageResource(R.drawable.icons_no_video)
+                            }
+                        }
+                        val timeWhenCalled = snapshot.child("timeStamp").child("time").value
+                        val date = format.parse(timeWhenCalled as String)
+                        val timeFormat = SimpleDateFormat("hh:mm a", Locale.US)
+                        val timeCall = date?.let { timeFormat.format(it) }
+                        holder.timeMsgCall.text = timeCall
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -131,7 +152,7 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
             holder.textMsgEmojiIcon.visibility = View.GONE
             holder.imageListRecyclerView.visibility = View.GONE
             holder.oneImageSendCard.visibility = View.GONE
-        } else if (message.messageType == "icon_like") {
+        } else if (message.messageType == "icon_like" && message.mediaFileType != "file") {
             // Set visibility
             holder.textMsgUser.visibility = View.GONE
             holder.textMsgEmojiIcon.visibility = View.GONE
@@ -143,7 +164,7 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
             holder.oneImageSendCard.layoutParams = params
             holder.oneImageSendCard.cardElevation = 0f
             Glide.with(context).load(R.drawable.icon_facebook_like).into(holder.oneImageSend)
-        } else if (message.messageType == "emoji_icon") {
+        } else if (message.messageType == "emoji_icon" && message.mediaFileType != "file") {
             // Set visibility
             holder.textMsgUser.visibility = View.GONE
             holder.imageListRecyclerView.visibility = View.GONE
@@ -178,8 +199,7 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
                     Toast.makeText(context, error.message, Toast.LENGTH_LONG).show()
                 }
             })
-        }
-        else { // Get url image profile of receiver
+        } else { // Get url image profile of receiver
             usersRef = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF).child(receiverId)
             usersRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -213,6 +233,7 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
         val msgCallView: LinearLayout = view.findViewById(R.id.msgCallView)
         val typeMsgCall: TextView = view.findViewById(R.id.typeMsgCall)
         val timeMsgCall: TextView = view.findViewById(R.id.timeMsgCall)
+        val iconStateCall: ImageView = view.findViewById(R.id.iconStateCall)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -242,6 +263,17 @@ class MessageAdapter (private var context: Context, private var messageList: Arr
         imageView.visibility = View.GONE
         recyclerView.layoutManager = GridLayoutManager(context, spanCount)
         recyclerView.adapter = ImageAdapter(context, imageList)
+    }
+
+    private fun formatTimeCallDuration(time: String): String {
+        val parts = time.split(":")
+        val minutes = parts[0].toInt()
+        val seconds = parts[1].toInt()
+        return if (minutes < 1) {
+            String.format("%02d secs", seconds)
+        } else {
+            String.format("%02d min %02d secs", minutes, seconds)
+        }
     }
 }
 

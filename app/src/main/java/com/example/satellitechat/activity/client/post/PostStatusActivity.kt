@@ -1,7 +1,7 @@
 package com.example.satellitechat.activity.client.post
 
-import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -13,17 +13,19 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.satellitechat.R
 import com.example.satellitechat.activity.client.MainActivity
 import com.example.satellitechat.utilities.constants.Constants
 import com.example.satellitechat.utilities.preference.PreferenceManager
+import com.example.satellitechat.utilities.time.TimeAndDateGeneral
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_status_post.*
 import kotlinx.android.synthetic.main.bottom_sheet_navigation.*
-import java.text.SimpleDateFormat
 
 
 class PostStatusActivity : AppCompatActivity() {
@@ -71,6 +73,8 @@ class PostStatusActivity : AppCompatActivity() {
         }
 
         contentStatus.requestFocus()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(contentStatus, InputMethodManager.SHOW_IMPLICIT)
         contentStatus.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
@@ -128,7 +132,7 @@ class PostStatusActivity : AppCompatActivity() {
         hashMap["expiry"] = "true"
         hashMap["contentStatus"] = contentStatus
         hashMap["postPermission"] = postPermission
-        hashMap["timeStamp"] = getCurrentTimeAndDate()
+        hashMap["timeStamp"] = TimeAndDateGeneral().getCurrentTimeAndDate()
         pushStatusPost.setValue(hashMap)
         dialog.dismiss()
     }
@@ -206,21 +210,9 @@ class PostStatusActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@PostStatusActivity, error.message, Toast.LENGTH_LONG).show()
             }
         })
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getCurrentTimeAndDate(): HashMap<String, Any> {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-        val timeFormat = SimpleDateFormat("hh:mm:ss a")
-        val currentDate: String = dateFormat.format(System.currentTimeMillis())
-        val currentTime: String = timeFormat.format(System.currentTimeMillis())
-        val messageState: HashMap<String, Any> = HashMap()
-        messageState["date"] = currentDate
-        messageState["time"] = currentTime
-        return messageState
     }
 
     override fun onStart() {

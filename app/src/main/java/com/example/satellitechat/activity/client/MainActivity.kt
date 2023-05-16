@@ -28,13 +28,12 @@ import com.example.satellitechat.activity.client.switch.SwitchAccountsActivity
 import com.example.satellitechat.model.User
 import com.example.satellitechat.utilities.constants.Constants
 import com.example.satellitechat.utilities.preference.PreferenceManager
-import com.example.satellitechat.utilities.time.CurrentTimeAndDate
+import com.example.satellitechat.utilities.time.TimeAndDateGeneral
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.*
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sidebar_header.view.*
-import java.text.SimpleDateFormat
 
 
 class MainActivity : AppCompatActivity() {
@@ -45,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var usersRef: DatabaseReference
     private lateinit var preferenceManager: PreferenceManager
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -188,14 +188,14 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         getUserForSidebar(currentUserId)
-        val hashMap = getCurrentTimeAndDate()
+        val hashMap = TimeAndDateGeneral().getCurrentTimeAndDate()
         updateUserState("online", hashMap)
         sendFCMTokenToDatabase()
     }
 
     override fun onStop() {
         super.onStop()
-        val hashMap = getCurrentTimeAndDate()
+        val hashMap = TimeAndDateGeneral().getCurrentTimeAndDate()
         hashMap["type"] = "offline"
         usersRef.child(currentUserId).child("userState").onDisconnect().setValue(hashMap)
     }
@@ -264,19 +264,6 @@ class MainActivity : AppCompatActivity() {
                 usersRef.child(currentUserId).child("fcmToken").setValue(task.result)
             })
     }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getCurrentTimeAndDate(): java.util.HashMap<String, Any> {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-        val timeFormat = SimpleDateFormat("hh:mm:ss a")
-        val currentDate: String = dateFormat.format(System.currentTimeMillis())
-        val currentTime: String = timeFormat.format(System.currentTimeMillis())
-        val messageState: java.util.HashMap<String, Any> = java.util.HashMap()
-        messageState["date"] = currentDate
-        messageState["time"] = currentTime
-        return messageState
-    }
-
 
 }
 

@@ -7,18 +7,20 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import com.example.satellitechat.R
 import com.example.satellitechat.services.remote.agora.media.RtcTokenBuilder2
+import com.example.satellitechat.utilities.constants.Constants.VIDEO_CALL
+import com.example.satellitechat.utilities.constants.Constants.AGORA_APP_CERTIFICATE
+import com.example.satellitechat.utilities.constants.Constants.AGORA_APP_ID
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
 import io.agora.rtc2.*
 import io.agora.rtc2.video.VideoCanvas
-import com.example.satellitechat.utilities.constants.Constants.AGORA_APP_ID
-import com.example.satellitechat.utilities.constants.Constants.AGORA_APP_CERTIFICATE
+
 
 class AgoraService (
     private var baseContext: Context,
     private var channelName: String,
     private var localViewVideo: FrameLayout,
     private var remoteViewVideo: FrameLayout,
-    private var checkSelfPermission: Boolean
+    private var meetingType: String
 ) {
 
     private var appId:String = AGORA_APP_ID
@@ -32,7 +34,7 @@ class AgoraService (
     private var remoteSurfaceView: SurfaceView? = null
 
     fun onCreate() {
-        setupVideoSDKEngine();
+        setupAgoraSDKEngine();
         val tokenBuilder = RtcTokenBuilder2()
         val timestamp = (System.currentTimeMillis() / 1000 + expirationTimeInSeconds).toInt()
         token = tokenBuilder.buildTokenWithUid(
@@ -50,15 +52,13 @@ class AgoraService (
         }.start()
     }
 
-    private fun setupVideoSDKEngine() {
+    private fun setupAgoraSDKEngine() {
         try {
             val config = RtcEngineConfig()
             config.mContext = baseContext
             config.mAppId = appId
             config.mEventHandler = mRtcEventHandler
             agoraEngine = RtcEngine.create(config)
-            // By default, the video module is disabled, call enableVideo to enable it.
-            agoraEngine!!.enableVideo()
         } catch (e: java.lang.Exception) {
             Toast.makeText(baseContext, e.message.toString(), Toast.LENGTH_SHORT).show()
         }
@@ -68,7 +68,11 @@ class AgoraService (
         // Listen for the remote host joining the channel to get the uid of the host.
         override fun onUserJoined(uid: Int, elapsed: Int) {
             // Set the remote video view
-            runOnUiThread { setupRemoteVideo(uid) }
+            runOnUiThread {
+                if (meetingType == VIDEO_CALL) {
+                    setupRemoteVideo(uid)
+                }
+            }
         }
 
         override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
@@ -76,21 +80,20 @@ class AgoraService (
         }
 
         override fun onUserOffline(uid: Int, reason: Int) {
-            runOnUiThread { remoteSurfaceView!!.visibility = View.GONE }
+            runOnUiThread {
+                if (meetingType == VIDEO_CALL) {
+                    remoteSurfaceView!!.visibility = View.GONE
+                }
+            }
+        }
+
+        override fun onLeaveChannel(stats: RtcStats?) {
+            isJoined = false
         }
     }
 
     private fun setupRemoteVideo(uid: Int) {
         remoteSurfaceView = SurfaceView(baseContext)
-        remoteSurfaceView!!.layoutParams = FrameLayout.LayoutParams (
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-        )
-        remoteSurfaceView!!.holder.setFixedSize(
-            remoteViewVideo.width,
-            remoteViewVideo.height
-        )
-        remoteViewVideo.setBackgroundResource(R.drawable.bg_radius8_video_call);
         remoteViewVideo.addView(remoteSurfaceView)
         agoraEngine!!.setupRemoteVideo(
             VideoCanvas(
@@ -105,7 +108,6 @@ class AgoraService (
     private fun setupLocalVideo() {
         localSurfaceView = SurfaceView(baseContext)
         localSurfaceView!!.setZOrderMediaOverlay(true)
-        localViewVideo.setBackgroundResource(R.drawable.bg_radius8_video_call);
         localViewVideo.addView(localSurfaceView)
         agoraEngine!!.setupLocalVideo(
             VideoCanvas(
@@ -116,29 +118,49 @@ class AgoraService (
         )
     }
 
-    fun joinChannel() {
-        if (checkSelfPermission) {
-            val options = ChannelMediaOptions()
-            options.channelProfile = Constants.CHANNEL_PROFILE_COMMUNICATION
-            options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
-            setupLocalVideo()
-            localSurfaceView!!.visibility = View.VISIBLE
-            agoraEngine!!.startPreview()
-            agoraEngine!!.joinChannel(token, channelName, uid, options)
-        } else {
-            Toast.makeText(baseContext, "Permissions was not granted", Toast.LENGTH_SHORT).show()
-        }
+    // Video call
+    fun joinChannelVideoCall() {
+        val options = ChannelMediaOptions()
+        options.channelProfile = Constants.CHANNEL_PROFILE_COMMUNICATION
+        options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
+        setupLocalVideo()
+        localSurfaceView!!.visibility = View.VISIBLE
+        agoraEngine!!.enableVideo()
+        agoraEngine!!.startPreview()
+        agoraEngine!!.joinChannel(token, channelName, uid, options)
     }
 
-    fun leaveChannel() {
+    fun leaveChannelVideoCall() {
         if (!isJoined) {
-            Toast.makeText(baseContext, "Join a channel first", Toast.LENGTH_SHORT).show()
+            Toast.makeText(baseContext, "Join a channel video call", Toast.LENGTH_SHORT).show()
         } else {
             agoraEngine!!.leaveChannel()
-            Toast.makeText(baseContext, "You left the channel", Toast.LENGTH_SHORT).show()
+            Toast.makeText(baseContext, "You left the channel video call", Toast.LENGTH_SHORT).show()
             if (remoteSurfaceView != null) remoteSurfaceView!!.visibility = View.GONE
             if (localSurfaceView != null) localSurfaceView!!.visibility = View.GONE
             isJoined = false
         }
     }
+
+    // Audio call
+    fun joinChannelAudioCall() {
+        val options = ChannelMediaOptions()
+        options.autoSubscribeAudio = true
+        options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
+        options.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
+        agoraEngine!!.disableVideo()
+        agoraEngine!!.joinChannel(token, channelName, uid, options)
+    }
+
+    fun leaveChannelAudioCall() {
+        if (!isJoined) {
+            Toast.makeText(baseContext, "Join a channel audio call", Toast.LENGTH_SHORT).show()
+        } else {
+            agoraEngine!!.leaveChannel()
+            Toast.makeText(baseContext, "You left the channel audio call", Toast.LENGTH_SHORT).show()
+            isJoined = false
+        }
+    }
+
+
 }

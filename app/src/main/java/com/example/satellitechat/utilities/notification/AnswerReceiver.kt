@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.satellitechat.activity.client.chat.IncomingCallActivity
 import com.example.satellitechat.utilities.constants.Constants
 
@@ -20,6 +21,7 @@ class AnswerReceiver : BroadcastReceiver() {
                     putExtra(Constants.REMOTE_MSG_MEETING_TYPE, intent.getStringExtra(Constants.REMOTE_MSG_MEETING_TYPE))
                     putExtra(Constants.REMOTE_MSG_MEETING_ROOM, intent.getStringExtra(Constants.REMOTE_MSG_MEETING_ROOM))
                     putExtra(Constants.REMOTE_MSG_INVITER_TOKEN, intent.getStringExtra(Constants.REMOTE_MSG_INVITER_TOKEN))
+                    putExtra(Constants.PENDING_INTENT_REQUEST, intent.getStringExtra(Constants.PENDING_INTENT_REQUEST))
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context?.startActivity(answerIntent)

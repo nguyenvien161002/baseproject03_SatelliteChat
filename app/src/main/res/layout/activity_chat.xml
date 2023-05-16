@@ -40,7 +40,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnVoiceCall"
             app:layout_constraintStart_toEndOf="@+id/iconBackChatActivity"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints,UselessParent">
@@ -148,7 +147,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
         android:layout_marginBottom="56dp"
-        android:paddingTop="4dp"
+        android:paddingTop="10dp"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         app:layout_constraintBottom_toTopOf="@+id/footerChatActivity"
@@ -204,7 +203,7 @@
                 android:contentDescription="@string/icon" />
 
             <ImageView
-                android:id="@+id/btnSendFiles"
+                android:id="@+id/btnChooseFiles"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
@@ -284,8 +283,8 @@
                 android:layout_height="match_parent"
                 android:padding="4dp"
                 android:gravity="left"
-                android:src="@drawable/ic_baseline_send"
-                tools:ignore="MissingConstraints"
+                android:src="@drawable/icon_facebook_like"
+                tools:ignore="MissingConstraints,RtlHardcoded"
                 android:contentDescription="@string/icon" />
 
         </LinearLayout>

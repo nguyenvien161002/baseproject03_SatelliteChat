@@ -82,29 +82,32 @@
 
         <!--  Search  -->
         <SearchView
-            android:id="@+id/input_search"
+            android:id="@+id/inputSearch"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/border_input_search"
             android:iconifiedByDefault="false"
+            android:textSize="14sp"
             android:queryBackground="@android:color/transparent"
             android:queryHint="Search" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:background="@color/white"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <FrameLayout
                 android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -117,12 +120,11 @@
                 app:menu="@menu/navigation_bottom"
                 android:backgroundTint="@color/white"
                 android:queryBackground="@android:color/transparent"
-                app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
                 tools:ignore="MissingConstraints">
 
             </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

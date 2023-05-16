@@ -160,12 +160,26 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <receiver android:name=".utilities.notification.AnswerReceiver" />
-        <receiver android:name=".utilities.notification.DeclineReceiver" />
+        <receiver
+            android:name=".utilities.notification.AnswerReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.example.satellitechat.ACTION_ANSWER" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".utilities.notification.DeclineReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.example.satellitechat.ACTION_ANSWER" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name="org.jitsi.meet.sdk.ConnectionService"
-            android:exported="true" />
+            android:exported="true"/>
     </application>
 
 </manifest>
