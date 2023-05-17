@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:id="@+id/chat_nav_bottom"
-        android:title="@string/chat_part"
-        android:icon="@drawable/icon_chat"/>
+        android:icon="@drawable/icon_chat"
+        android:title="@string/chat_part" />
+
     <item
-        android:id="@+id/call_nav_bottom"
-        android:title="@string/call"
-        android:icon="@drawable/icon_video_call" />
+        android:id="@+id/calls_nav_bottom"
+        android:icon="@drawable/icon_video_call"
+        android:title="@string/calls" />
+
     <item
-        android:id="@+id/news_nav_bottom"
-        android:title="@string/news"
-        android:icon="@drawable/icon_literature" />
+        android:id="@+id/profile_nav_bottom"
+        android:icon="@drawable/icons_profile_user"
+        android:title="@string/profile" />
+
+    <item
+        android:id="@+id/stories_nav_bottom"
+        android:icon="@drawable/icon_literature"
+        android:title="@string/news" />
+
+    <item
+        android:id="@+id/friends_nav_bottom"
+        android:icon="@drawable/icons_friends"
+        android:title="@string/friends" />
+
 </menu>

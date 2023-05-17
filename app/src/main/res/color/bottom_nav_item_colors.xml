@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Màu cho mục khi được nhấn -->
+    <item android:color="@color/blue" android:state_pressed="true" />
+    <!-- Màu cho mục khi được chọn -->
+    <item android:color="@color/blue" android:state_checked="true" />
+    <!-- Màu mặc định cho mục -->
+    <item android:color="@color/black_400" />
+</selector>

@@ -5,15 +5,15 @@
     android:id="@+id/drawer_layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".activity.client.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/white"
+        android:orientation="vertical"
         android:paddingTop="5dp">
 
         <!--  Navigation  -->
@@ -21,10 +21,10 @@
             android:id="@+id/navigation_main"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
@@ -46,7 +46,6 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:gravity="center"
-                    android:text="@string/app_author"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -72,57 +71,39 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
                     android:contentDescription="@string/menu"
-                    android:padding="6dp"
                     android:elevation="@dimen/_2sdp"
+                    android:padding="6dp"
                     android:src="@drawable/new_message" />
 
             </RelativeLayout>
 
         </LinearLayout>
 
-        <!--  Search  -->
-        <SearchView
-            android:id="@+id/inputSearch"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/border_input_search"
-            android:iconifiedByDefault="false"
-            android:textSize="14sp"
-            android:queryBackground="@android:color/transparent"
-            android:queryHint="Search" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:background="@color/white"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_height="match_parent"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <FrameLayout
                 android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1" />
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottomNavigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                app:menu="@menu/navigation_bottom"
-                android:backgroundTint="@color/white"
+                app:itemIconSize="26dp"
+                app:itemIconTint="@color/bottom_nav_item_colors"
+                app:itemTextColor="@color/bottom_nav_item_colors"
+                app:itemTextAppearanceActive="@style/BotNavTextSize"
                 android:queryBackground="@android:color/transparent"
-                tools:ignore="MissingConstraints">
-
-            </com.google.android.material.bottomnavigation.BottomNavigationView>
+                app:menu="@menu/navigation_bottom" />
 
         </LinearLayout>
 
@@ -133,8 +114,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/sidebar_header">
-
-    </com.google.android.material.navigation.NavigationView>
+        app:headerLayout="@layout/sidebar_header" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

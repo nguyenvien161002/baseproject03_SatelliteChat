@@ -13,6 +13,7 @@
         android:id="@+id/scrollViewSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
-                android:textSize="37sp"
+                android:textSize="34sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -83,7 +84,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <EditText

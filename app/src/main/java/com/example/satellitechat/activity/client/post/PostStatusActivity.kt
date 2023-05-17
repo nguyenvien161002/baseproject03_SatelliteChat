@@ -195,16 +195,15 @@ class PostStatusActivity : AppCompatActivity() {
     private fun getInfoUser() {
         usersRef.child(currentUserId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val imgUser = snapshot.child("userImage").value
-                if (imgUser == "") {
-                    Glide.with(this@PostStatusActivity).load(imgUser).placeholder(R.drawable.avatar)
-                        .into(imageUser)
+                val imgUserDb = snapshot.child("userImage").value
+                if (imgUserDb == "") {
+                    imageUser.setImageResource(R.drawable.avatar)
+                    Glide.with(this@PostStatusActivity).load(R.drawable.avatar).into(imageUser)
                 } else {
                     if (this@PostStatusActivity.isDestroyed) {
                         return
                     } else {
-                        Glide.with(this@PostStatusActivity).load(imgUser)
-                            .placeholder(R.drawable.avatar).into(imageUser)
+                        Glide.with(this@PostStatusActivity).load(imgUserDb).placeholder(R.drawable.avatar).into(imageUser)
                     }
                 }
             }

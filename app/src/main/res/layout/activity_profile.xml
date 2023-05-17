@@ -12,8 +12,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        tools:ignore="MissingConstraints,UseCompoundDrawables"
-        tools:layout_editor_absoluteX="15dp">
+        tools:ignore="MissingConstraints,UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/icon_backspace"

@@ -19,11 +19,15 @@ import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.satellitechat.R
+import com.example.satellitechat.activity.client.fragment.CallsFragment
+import com.example.satellitechat.activity.client.fragment.FriendsFragment
+import com.example.satellitechat.activity.client.fragment.ProfileFragment
+import com.example.satellitechat.activity.client.fragment.StoriesFragment
 import com.example.satellitechat.activity.client.profile.ProfileActivity
-import com.example.satellitechat.activity.client.sidebar.ArchivesFragment
-import com.example.satellitechat.activity.client.sidebar.ChatFragment
-import com.example.satellitechat.activity.client.sidebar.MarketPlaceFragment
-import com.example.satellitechat.activity.client.sidebar.MessageWaitingFragment
+import com.example.satellitechat.activity.client.fragment.ArchivesFragment
+import com.example.satellitechat.activity.client.fragment.ChatFragment
+import com.example.satellitechat.activity.client.fragment.MarketPlaceFragment
+import com.example.satellitechat.activity.client.fragment.MessageWaitingFragment
 import com.example.satellitechat.activity.client.switch.SwitchAccountsActivity
 import com.example.satellitechat.model.User
 import com.example.satellitechat.utilities.constants.Constants
@@ -48,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         usersRef = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF)
         preferenceManager = PreferenceManager(this@MainActivity)
         currentUserId = preferenceManager.getCurrentId().toString()
@@ -122,6 +127,32 @@ class MainActivity : AppCompatActivity() {
             checkPermissions(Constants.CAMERA_PERMISSION)
         }
 
+        bottomNavigation.setOnItemSelectedListener { itemMenu ->
+            when (itemMenu.itemId) {
+                R.id.chat_nav_bottom -> {
+                    replaceFragment(ChatFragment())
+                    true
+                }
+                R.id.calls_nav_bottom -> {
+                    replaceFragment(CallsFragment())
+                    true
+                }
+                R.id.profile_nav_bottom -> {
+                    replaceFragment(ProfileFragment())
+                    true
+                }
+                R.id.stories_nav_bottom -> {
+                    replaceFragment(StoriesFragment())
+                    true
+                }
+                R.id.friends_nav_bottom -> {
+                    replaceFragment(FriendsFragment())
+                    true
+                }
+                else -> { false }
+            }
+        }
+
     }
 
     private fun checkPermissions(permission: String) {
@@ -150,7 +181,6 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val currentTime = System.currentTimeMillis()
         val interval = currentTime - backPressedTime
-
         if (interval < 2000) {
             super.onBackPressed()
         } else {

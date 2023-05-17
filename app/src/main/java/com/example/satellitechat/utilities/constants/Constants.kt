@@ -6,9 +6,9 @@ object Constants {
     const val USERS_REF: String = "Users"
     const val MESSAGES_REF: String = "Messages"
     const val STATUSES_REF: String = "Statuses"
+    const val RELATIONSHIPS_REF: String = "Relationships"
     const val STATUS_PERMISSION: String = "status_permission"
     const val STATUS_ID: String = "status_id"
-
     const val USER_ID: String = "user_id"
     const val USER_NAME: String = "user_name"
     const val USER_EMAIL: String = "user_email"

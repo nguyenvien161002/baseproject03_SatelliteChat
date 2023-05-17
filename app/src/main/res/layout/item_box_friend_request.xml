@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemBoxSuggestedFriend"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageFriend"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:padding="2dp"
+            android:src="@drawable/avatar"
+            app:shapeAppearanceOverlay="@style/Circular"
+            app:strokeColor="@null" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/friendName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="4dp"
+                android:text="@string/app_author"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/suggestionFriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="4dp"
+                android:text="@string/label_suggested_friend"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="4dp"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/btnCancelRequest"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/border_input_search"
+                    android:gravity="center"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:text="@string/label_cancel"
+                    android:visibility="gone"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="NestedWeights" />
+
+                <TextView
+                    android:id="@+id/btnAddFriend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_btn_black70_radius6"
+                    android:backgroundTint="@color/blue"
+                    android:gravity="center"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:text="@string/label_add_friend"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="NestedWeights" />
+
+                <TextView
+                    android:id="@+id/btnRemoveFriend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_btn_black70_radius6"
+                    android:gravity="center"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:text="@string/label_remove"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

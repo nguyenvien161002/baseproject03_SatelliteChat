@@ -5,13 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:configChanges="orientation|screenSize"
-    tools:context=".activity.client.sidebar.ChatFragment">
+    tools:context=".activity.client.fragment.ChatFragment">
+
+    <!--  Search  -->
+    <SearchView
+        android:id="@+id/inputSearch"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/border_input_search"
+        android:iconifiedByDefault="false"
+        android:queryBackground="@android:color/transparent"
+        android:queryHint="Search"
+        android:textSize="14sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/main_content_component"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="70dp"
+        app:layout_constraintTop_toBottomOf="@+id/inputSearch">
 
         <!--  Users online  -->
         <LinearLayout
@@ -117,8 +134,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/contentStatusContainer"
                     android:layout_width="wrap_content"
-                    android:visibility="gone"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <!-- container contain content status -->
                     <RelativeLayout
@@ -257,9 +274,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/label_messages"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
+                android:text="@string/label_messages"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />

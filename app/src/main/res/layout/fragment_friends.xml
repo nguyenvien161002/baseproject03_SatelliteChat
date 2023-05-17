@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.client.fragment.FriendsFragment">
+
+    <!--  Search  -->
+    <SearchView
+        android:id="@+id/inputSearchFriend"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/border_input_search"
+        android:iconifiedByDefault="false"
+        android:queryBackground="@android:color/transparent"
+        android:queryHint="Search"
+        android:textSize="14sp"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputSearchFriend"
+        android:background="@drawable/border_bottom_1_black100"
+        android:gravity="left|center"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:weightSum="6"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
+
+        <TextView
+            android:id="@+id/btnSuggestions"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="2"
+            android:background="@drawable/border_input_search"
+            android:gravity="center"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/label_suggestions"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnFriendRequests"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="2"
+            android:background="@drawable/border_input_search"
+            android:gravity="center"
+            android:text="@string/label_friend_requests"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnYourFriends"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="2"
+            android:background="@drawable/border_input_search"
+            android:gravity="center"
+            android:text="@string/label_your_friends"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayout"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                tools:ignore="UselessParent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_suggestion_requests"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    android:textColor="@color/red"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btnSeeAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="10dp"
+                android:paddingStart="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/label_see_all"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap,RtlSymmetry" />
+
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayoutFriendsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</RelativeLayout>
